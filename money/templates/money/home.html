@@ -84,6 +84,8 @@ $('.editable .save').live('click', function (e) {
            form.serialize(),
            function (snippet) {
                editable.html(snippet);
+               // reload the summary panel
+               $('#related').load('/ #related table');
            })
 });     
 
