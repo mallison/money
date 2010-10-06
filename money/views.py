@@ -7,10 +7,12 @@ import loading
 import models
 
 def home(request):
+    transactions = models.Transaction.objects.all()
     return render_to_response(
         'money/home.html',
-        {'transactions': models.Transaction.objects.all(),
-         'tags': models.Tag.objects.order_by('name')})
+        {'transactions': transactions,
+         'tags': models.Tag.objects.order_by('name'),
+         'totals_for_tags': totals_for_tags(transactions)})
 
 def load(request):
     if request.method == 'POST':
@@ -50,3 +52,10 @@ def save_tags(request):
     return render_to_response('money/tags_snippet.html',
                               {'transaction': transaction,
                                'tags': models.Tag.objects.all()})
+
+
+## Utils
+def totals_for_tags(transactions):
+    for tag in models.Tag.objects.all():
+        tagged_transactions = transactions.filter(tags=tag).values_list('amount', flat=True)
+        yield (tag, sum(tagged_transactions) / 100.0 )

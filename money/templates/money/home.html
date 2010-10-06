@@ -1,50 +1,61 @@
 <html>
 <head>
     <title>Money</title>
+    <style>
+    body { font-family: sans-serif; font-size: 90% }
+    table { font-size: 100% }
+    th { text-align: left; border-bottom: 1px dotted black }
+    td { 
+        vertical-align: top;
+        padding: 0 1em 1em 0;
+    }
+    td.amount, th.amount { 
+        text-align: right;
+    }
+    td.amount { font-family: monospace; font-size: 120% }
+    .hidden { display: none }
+    p { margin: 0; padding: 0}
+    .close, .save { font-size: 80% }
+    .editable .display { border: 1px solid white }
+    .editable .display:hover { border: 1px solid black; cursor:pointer }
+    .note { width: 15em }
+    #main, #related { float: left }
+    #related { margin-left: 1em }
+    </style>     
 </head>
 <body>
 <p><a href="/load/">load</a> | <a href="/admin/">admin</a></p>
-
-<style>
-body { font-family: sans-serif; font-size: 90% }
-table { font-size: 100% }
-th { text-align: left; border-bottom: 1px dotted black }
-td { 
-    vertical-align: top;
-    padding: 0 1em 1em 0;
-}
-td.amount, th.amount { 
-    text-align: right
-}
-td.amount { font-family: monospace }
-.hidden { display: none }
-p { margin: 0; padding: 0}
-.close, .save { font-size: 80% }
-.editable .display { border: 1px solid white }
-.editable .display:hover { border: 1px solid black; cursor:pointer }
-.note { width: 15em }
-</style>     
-
-<table>
-     <tr>
-         <th>Date</th>
-         <th>Memo</th>
-         <th class="amount">Amount</th>
-         <th>Balance</th>
-         <th>Note</th>
-         <th>Tags</th>
-     </tr>
-     {% for transaction in transactions %}
+<hr>
+<div id="main">
+    <table>
          <tr>
-             <td>{{ transaction.date|date:"d F Y" }}</td>
-             <td>{{ transaction.memo|linebreaks }}</td>
-             <td class="amount">{{ transaction.display_amount }}</td>
-             <td class="amount">{{ transaction.display_balance }}</td>
-             <td class="note editable">{% include "money/note_snippet.html" %}</td>
-             <td class="editable">{% include "money/tags_snippet.html" %}</td>
+             <th>date</th>
+             <th>memo</th>
+             <th class="amount">amount</th>
+             <th>balance</th>
+             <th>note</th>
+             <th>tags</th>
          </tr>
+         {% for transaction in transactions %}
+             <tr>
+                 <td>{{ transaction.date|date:"d F Y" }}</td>
+                 <td>{{ transaction.memo|linebreaks }}</td>
+                 <td class="amount">{{ transaction.display_amount }}</td>
+                 <td class="amount">{{ transaction.display_balance }}</td>
+                 <td class="note editable">{% include "money/note_snippet.html" %}</td>
+                 <td class="editable">{% include "money/tags_snippet.html" %}</td>
+             </tr>
+         {% endfor %}
+    </table>
+</div>
+<div id="related">
+     <table>
+     <tr><th>tag</th><th class="amount">amount</th></tr>
+     {% for tag, total in totals_for_tags %}
+          <tr><td>{{ tag.name }}</td><td class="amount">{{ total|floatformat:2 }}</td></tr>
      {% endfor %}
-</table>
+     </table>
+</div>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script>
 (function () {
