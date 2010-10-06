@@ -12,7 +12,8 @@ def home(request):
         'money/home.html',
         {'transactions': transactions,
          'tags': models.Tag.objects.order_by('name'),
-         'totals_for_tags': totals_for_tags(transactions)})
+         'totals_for_tags': totals_for_tags(transactions),
+         'in_and_out': in_and_out(transactions)})
 
 def load(request):
     if request.method == 'POST':
@@ -59,3 +60,9 @@ def totals_for_tags(transactions):
     for tag in models.Tag.objects.all():
         tagged_transactions = transactions.filter(tags=tag).values_list('amount', flat=True)
         yield (tag, sum(tagged_transactions) / 100.0 )
+
+def in_and_out(transactions):
+    for selector in ('amount__gte', 'amount__lt'):
+        filtered_transactions = transactions.filter(
+            **{selector: 0}).values_list('amount', flat=True)
+        yield sum(filtered_transactions) / 100.0
