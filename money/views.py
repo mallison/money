@@ -48,4 +48,5 @@ def save_tags(request):
         id__in=request.POST.getlist('tags'))
     transaction.save()
     return render_to_response('money/tags_snippet.html',
-                              {'transaction': transaction})
+                              {'transaction': transaction,
+                               'tags': models.Tag.objects.all()})
