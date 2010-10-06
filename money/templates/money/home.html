@@ -54,6 +54,7 @@ $('.editable').click(function (e) {
         display = that.find('.display')
     display.hide();
     that.find('.control_container').show();
+    that.find('.control').focus().select();
 });     
 
 $('.editable .close').live('click', function (e) {
