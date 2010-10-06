@@ -22,6 +22,8 @@
     #main, #related { float: left }
     #related { margin-left: 1em }
     th.left { vertical-align: top; border: none }
+    tr.misc { background-color: red; color: white; font-weight: bold }
+    tr.misc td { vertical-align: middle }
     </style>     
 </head>
 <body>
@@ -57,7 +59,7 @@
      <table>
      <tr><th>tag</th><th class="amount">amount</th></tr>
      {% for tag, total in totals_for_tags %}
-          <tr><td>{{ tag.name }}</td><td class="amount">{{ total|floatformat:2 }}</td></tr>
+          <tr{% if tag.name = "misc" %} class="misc"{% endif %}><td>{{ tag.name }}</td><td class="amount">{{ total|floatformat:2 }}</td></tr>
      {% endfor %}
      </table>
 </div>
