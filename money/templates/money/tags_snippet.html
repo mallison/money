@@ -1,0 +1,12 @@
+<span class="display {% if not transaction.tags.count %} hidden {% endif %}">{{ transaction.tags.all }}</span>
+<div class="control_container{% if transaction.tags.count %} hidden {% endif %}">
+    <form action="save/tags/">
+        <select name="tags" class="control" multiple="multiple">
+            {% for tag in tags %}
+                <option{% for selected_tag in transaction.tags.all %}{% ifequal selected_tag tag %} selected="selected"{% endifequal %}{% endfor %} value="{{ tag.pk }}">{{ tag.name }}</option>
+            {% endfor %}
+        </select>
+        <p><a class="save" href="">save</a> | <a class="close" href="close">close</a></p>
+        <input type="hidden" name="transaction" value="{{ transaction.pk }}">
+    </form>
+</div>

@@ -1,0 +1,71 @@
+<html>
+<head></head>
+<body>
+<p><a href="/load/">load</a></p>
+
+<style>
+th { text-align: left }
+td { 
+    vertical-align: top;
+    padding-right: 1em;
+}
+td.amount, th.amount { 
+    text-align: right
+}
+td.amount { font-family: monospace }
+.hidden { display: none }
+</style>     
+
+<table>
+     <tr>
+         <th>Date</th>
+         <th>Memo</th>
+         <th class="amount">Amount</th>
+         <th>Balance</th>
+         <th>Note</th>
+         <th>Tags</th>
+     </tr>
+     {% for transaction in transactions %}
+         <tr>
+             <td>{{ transaction.date|date:"d F Y" }}</td>
+             <td>{{ transaction.memo|linebreaks }}</td>
+             <td class="amount">{{ transaction.display_amount }}</td>
+             <td class="amount">{{ transaction.display_balance }}</td>
+             <td class="editable">{% include "money/note_snippet.html" %}</td>
+             <td class="editable">{% include "money/tags_snippet.html" %}</td>
+         </tr>
+     {% endfor %}
+</table>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script>
+(function () {
+
+$('.editable').click(function (e) {
+    var that = $(this);
+        display = that.find('.display')
+    display.hide();
+    that.find('.control_container').show();
+});     
+
+$('.editable .close').live('click', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var editable = $(this).parents('.editable');
+    editable.find('.display').show();
+    editable.find('.control_container').hide();
+});     
+
+$('.editable .save').live('click', function (e) {
+    e.preventDefault();
+    var editable = $(this).parents('.editable'),
+        form = editable.find('form');
+    $.post(form.attr('action'), 
+           form.serialize(),
+           function (snippet) {
+               editable.html(snippet);
+           })
+});     
+
+}());
+</script>
+</body>
