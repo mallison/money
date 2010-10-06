@@ -1,10 +1,14 @@
 <html>
-<head></head>
+<head>
+    <title>Money</title>
+</head>
 <body>
-<p><a href="/load/">load</a></p>
+<p><a href="/load/">load</a> | <a href="/admin/">admin</a></p>
 
 <style>
-th { text-align: left }
+body { font-family: sans-serif; font-size: 90% }
+table { font-size: 100% }
+th { text-align: left; border-bottom: 1px dotted black }
 td { 
     vertical-align: top;
     padding-right: 1em;
@@ -14,6 +18,8 @@ td.amount, th.amount {
 }
 td.amount { font-family: monospace }
 .hidden { display: none }
+p { margin: 0; padding: 0}
+.close, .save { font-size: 80% }
 </style>     
 
 <table>

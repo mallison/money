@@ -2,7 +2,7 @@
 <div class="control_container{% if transaction.note %} hidden {% endif %}">
     <form action="save/note/">
         <textarea name="note" class="control" rows="3" cols="20">{{ transaction.note }}</textarea>
-        <p><a class="save" href="">save</a> | 
+        <p><a class="save" href="save">save</a> | 
            <a class="close" href="close">close</a></p>
         <input type="hidden" name="transaction" value="{{ transaction.pk }}">
     </form>
