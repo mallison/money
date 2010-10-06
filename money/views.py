@@ -9,7 +9,7 @@ import models
 def home(request):
     return render_to_response(
         'money/home.html',
-        {'transactions': models.Transaction.objects.order_by('-date'),
+        {'transactions': models.Transaction.objects.all(),
          'tags': models.Tag.objects.order_by('name')})
 
 def load(request):

@@ -17,9 +17,11 @@ class Transaction(models.Model):
     note = models.TextField()
     tags = models.ManyToManyField('Tag')
 
+    class Meta:
+        ordering = ('-date', '-memo')
+
     def balance(self):
-        # TODO: can't rely on PKs for this!!!!!!!!!
-        previous = self.__class__.objects.filter(pk__gte=self.pk).values_list('amount', flat=True)
+        previous = self.__class__.objects.filter(date__lte=self.date).filter(memo__lte=self.memo).values_list('amount', flat=True)
         return sum(previous)
 
     def _format_amount(self, amount):
