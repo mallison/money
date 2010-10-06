@@ -20,6 +20,9 @@ td.amount { font-family: monospace }
 .hidden { display: none }
 p { margin: 0; padding: 0}
 .close, .save { font-size: 80% }
+.editable .display { border: 1px solid white }
+.editable .display:hover { border: 1px solid black; cursor:pointer }
+.note { width: 15em }
 </style>     
 
 <table>
@@ -37,7 +40,7 @@ p { margin: 0; padding: 0}
              <td>{{ transaction.memo|linebreaks }}</td>
              <td class="amount">{{ transaction.display_amount }}</td>
              <td class="amount">{{ transaction.display_balance }}</td>
-             <td class="editable">{% include "money/note_snippet.html" %}</td>
+             <td class="note editable">{% include "money/note_snippet.html" %}</td>
              <td class="editable">{% include "money/tags_snippet.html" %}</td>
          </tr>
      {% endfor %}
