@@ -8,6 +8,8 @@ urlpatterns = patterns('',
 
     (r'^load/$', views.load),
 
+    (r'^summary/(\d+)/$', views.summary),
+
     (r'^save/note/$', views.save_note),
 
     (r'^save/tags/$', views.save_tags),

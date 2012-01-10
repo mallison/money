@@ -1,10 +1,15 @@
+import datetime
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
+# TODO: not sure this is a good style of import (but Guido seems to do it in appengine examples)
 import forms
 import loading
 import models
+from money.transaction import totals_for_tags, in_and_out
+
 
 def home(request):
     transactions = models.Transaction.objects.all()
@@ -55,18 +60,23 @@ def save_tags(request):
                                'tags': models.Tag.objects.all()})
 
 
-## Utils
-def totals_for_tags(transactions):
-    for tag in models.Tag.objects.all():
-        tagged_transactions = transactions.filter(tags=tag).values_list('amount', flat=True)
-        yield (tag, sum(tagged_transactions) / 100.0 )
-    untagged = transactions.filter(tags__isnull=True).values_list(
-        'amount', flat=True)
-    if untagged.count():
-        yield ({'name': 'misc'}, sum(untagged) / 100.0 )
-
-def in_and_out(transactions):
-    for selector in ('amount__gte', 'amount__lt'):
-        filtered_transactions = transactions.filter(
-            **{selector: 0}).values_list('amount', flat=True)
-        yield sum(filtered_transactions) / 100.0
+def summary(request, year):
+    transactions = models.Transaction.objects.filter(date__year=year)
+    months = []
+    for month in xrange(1, 12):
+        transactions_for_month = transactions.filter(date__month=month)
+        months.append(
+            {'name': datetime.date(2012, month, 1).strftime("%B"),
+             'summary': in_and_out(transactions_for_month),
+             'tags': totals_for_tags(transactions_for_month),
+             })
+    # TODO: what's the new way to render to a template?
+    return render_to_response(
+        'money/summary.txt',
+        {'year': year,
+         'summary': in_and_out(transactions),
+         'tags': totals_for_tags(transactions),
+         'months': months
+         },
+        mimetype="text/plain",
+        )
