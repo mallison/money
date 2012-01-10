@@ -1,0 +1,14 @@
+Summary for {{ year }}
+
+in: {{ summary.next }}
+out: {{ summary.next }}
+{% for tag, amount in tags %}
+{{ tag }}: {{ amount }}{% endfor %}
+
+---------
+{% for month in months %}
+{{ month.name }}
+in: {{ month.summary.next }}
+out: {{ month.summary.next }}{% for tag, amount in month.tags %}{% if amount > 0 %}
+{{ tag }}: {{ amount }}{% endif %}{% endfor %}
+{% endfor %}
