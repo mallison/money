@@ -1,4 +1,8 @@
 from django.db import models
+from django.db.models import Q
+
+INITIAL_BALANCE = 173886
+
 
 class Account(models.Model):
     sort_code = models.CharField(max_length=6)
@@ -21,8 +25,13 @@ class Transaction(models.Model):
         ordering = ('-date', '-memo')
 
     def balance(self):
-        previous = self.__class__.objects.filter(date__lte=self.date).filter(memo__lte=self.memo).values_list('amount', flat=True)
-        return sum(previous)
+        previous = self.__class__.objects.filter(
+            # TODO: this will be incorrect if two transactions have the same date and memo
+            # (but I'm kind of assuming that doesn't happen!)
+            Q(date__lt=self.date) | Q(date=self.date) & Q(memo__lte=self.memo)
+            ).values_list('amount', flat=True)
+        # TODO: can do this with aggregations now
+        return sum(previous) + INITIAL_BALANCE
 
     def _format_amount(self, amount):
         return '%.2f' % (amount / 100.00)
