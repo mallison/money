@@ -15,6 +15,14 @@ from money.transaction import totals_for_tags, in_and_out
 
 def home(request):
     transactions = models.Transaction.objects.all()
+    try:
+        days = int(request.GET.get('days'))
+    except (TypeError, ValueError):
+        pass
+    else:
+        if days > 0:
+            transactions = transactions.filter(
+                date__gt=datetime.date.today() - datetime.timedelta(days))
     return render_to_response(
         'money/home.html',
         {'transactions': transactions,
