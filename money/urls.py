@@ -6,6 +6,8 @@ urlpatterns = patterns('',
 
     (r'^$', views.home),
 
+    (r'^untagged/$', views.untagged),
+
     (r'^load/$', views.load),
 
     (r'^summary/(\d+)/$', views.summary),

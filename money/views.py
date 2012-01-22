@@ -30,6 +30,17 @@ def home(request):
          'totals_for_tags': totals_for_tags(transactions),
          'in_and_out': in_and_out(transactions)})
 
+
+def untagged(request):
+    transactions = models.Transaction.objects.filter(tags__isnull=True)
+    return render_to_response(
+        'money/home.html',
+        {'transactions': transactions,
+         'tags': models.Tag.objects.order_by('name'),
+         'totals_for_tags': totals_for_tags(transactions),
+         'in_and_out': in_and_out(transactions)})
+    
+
 @csrf_exempt
 def load(request):
     if request.method == 'POST':
