@@ -6,13 +6,14 @@ from django.template import RequestContext
 # TODO: figure out csrf with ajax, csrf_exempt is a temp hack for now
 from django.views.decorators.csrf import csrf_exempt
 
-# TODO: not sure this is a good style of import (but Guido seems to do it in appengine examples)
-import forms
+# TODO: not sure this is a good style of import (but Guido seems to do
+# it in appengine examples)
 import loading
 import models
 from money.transaction import totals_for_tags, in_and_out
 
 
+# TODO: class based generic view for home and untagged!
 def home(request):
     transactions = models.Transaction.objects.all()
     try:
