@@ -16,5 +16,12 @@ def totals_for_tags(transactions):
 def in_and_out(transactions):
     for selector in ('amount__gte', 'amount__lt'):
         filtered_transactions = transactions.filter(
-            **{selector: 0}).values_list('amount', flat=True)
+            **{selector: 0}
+              ).exclude(
+            # exclude savings as it's not income
+            tags__name="savings").values_list('amount', flat=True)
+        # TODO: no ORM way to do the summing?
         yield sum(filtered_transactions) / 100.0
+    yield -sum(
+        transactions.filter(tags__name="savings")
+        .values_list('amount', flat=True)) / 100
