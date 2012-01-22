@@ -3,6 +3,8 @@ import datetime
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+# TODO: figure out csrf with ajax, csrf_exempt is a temp hack for now
+from django.views.decorators.csrf import csrf_exempt
 
 # TODO: not sure this is a good style of import (but Guido seems to do it in appengine examples)
 import forms
@@ -20,6 +22,7 @@ def home(request):
          'totals_for_tags': totals_for_tags(transactions),
          'in_and_out': in_and_out(transactions)})
 
+@csrf_exempt
 def load(request):
     if request.method == 'POST':
         pasted_data = request.POST.get('pasted_data')
@@ -40,6 +43,7 @@ def load(request):
                               context_instance=RequestContext(request))
 
 #@request_POST
+@csrf_exempt
 def save_note(request):
     transaction = models.Transaction.objects.get(
         pk=request.POST.get('transaction'))
@@ -49,6 +53,7 @@ def save_note(request):
                               {'transaction': transaction})
 
 #@request_POST
+@csrf_exempt
 def save_tags(request):
     transaction = models.Transaction.objects.get(
         pk=request.POST.get('transaction'))
