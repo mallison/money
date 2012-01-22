@@ -29,8 +29,8 @@ def parse_pasted_barclays_online_statement(data):
              'memo': fields[1], 
              'amount': clean_amount(fields[2]) or clean_amount(fields[3])})
         try:
-            for i in range(3):
+            while True:
                 add_detail(transactions, lines)
-        except BlankLine:
+        except (BlankLine, IndexError):
             pass
     return transactions
