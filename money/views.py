@@ -40,14 +40,15 @@ def untagged(request):
          'tags': models.Tag.objects.order_by('name'),
          'totals_for_tags': totals_for_tags(transactions),
          'in_and_out': in_and_out(transactions)})
-    
+
 
 @csrf_exempt
 def load(request):
     if request.method == 'POST':
         pasted_data = request.POST.get('pasted_data')
         try:
-            transactions = loading.parse_pasted_barclays_online_statement(pasted_data)
+            transactions = loading.parse_pasted_barclays_online_statement(
+                pasted_data)
         except:
             errors = ['Oops']
         else:
@@ -62,6 +63,7 @@ def load(request):
                                'errors': errors},
                               context_instance=RequestContext(request))
 
+
 #@request_POST
 @csrf_exempt
 def save_note(request):
@@ -71,6 +73,7 @@ def save_note(request):
     transaction.save()
     return render_to_response('money/note_snippet.html',
                               {'transaction': transaction})
+
 
 #@request_POST
 @csrf_exempt

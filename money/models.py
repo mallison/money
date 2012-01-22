@@ -12,6 +12,7 @@ class Account(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class Transaction(models.Model):
     account = models.ForeignKey(Account, null=True)
     date = models.DateField()
@@ -26,8 +27,9 @@ class Transaction(models.Model):
 
     def balance(self):
         previous = self.__class__.objects.filter(
-            # TODO: this will be incorrect if two transactions have the same date and memo
-            # (but I'm kind of assuming that doesn't happen!)
+            # TODO: this will be incorrect if two transactions have
+            # the same date and memo (but I'm kind of assuming that
+            # doesn't happen!)
             Q(date__lt=self.date) | Q(date=self.date) & Q(memo__lte=self.memo)
             ).values_list('amount', flat=True)
         # TODO: can do this with aggregations now
@@ -35,12 +37,13 @@ class Transaction(models.Model):
 
     def _format_amount(self, amount):
         return '%.2f' % (amount / 100.00)
-        
+
     def display_amount(self):
         return self._format_amount(self.amount)
 
     def display_balance(self):
         return self._format_amount(self.balance())
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=255)
