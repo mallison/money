@@ -19,7 +19,7 @@ class Transaction(models.Model):
     amount = models.IntegerField()  # in pence
     memo = models.TextField()
     description = models.TextField()
-    note = models.TextField()
+    note = models.TextField(blank=True)
     tags = models.ManyToManyField('Tag')
 
     class Meta:
