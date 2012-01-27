@@ -71,7 +71,14 @@
      <tr><th>tag</th><th class="amount">amount</th></tr>
      {% for tag, total in totals_for_tags %}
          {% if total %}
-          <tr class="tag{% if tag.name = "misc" %} misc{% endif %}"><td>{{ tag.name }}</td><td class="amount">{{ total|floatformat:2 }}</td></tr>
+          <tr class="tag{% if tag = "misc" %} misc{% endif %}">
+	    <td>
+	      <label for="{{ tag }}">{{ tag }}</label>
+	    </td>
+	    <td class="amount">
+	      <label>{{ total|floatformat:2 }}<input id="{{ tag }}" name="tags" type="radio" value="{{ tag }}" /></label>
+	    </td>
+	  </tr>
          {% endif %}
      {% endfor %}
      </table>
@@ -109,13 +116,13 @@
     });     
 
     // show transactions for a given tag
-    $('tr.tag').hover(
-        function () {
-            $('#main tr[class!="' + $(this).find('td:first').text() + '"]').fadeOut('fast');
-        },
-        function () {
-            $('#main tr[class!="' + $(this).find('td:first').text() + '"]').show();
-        }
+   $('input[name="tags"]').change(
+       // TODO is onchange still broken in IE (element has to lose focus to fire onchange)
+       function () {
+           // TODO: this is lazy, hiding all then showing one -- use some state!
+           $('#main tr').hide();
+           $('#main tr[class="' + $(this).val() + '"]').show();
+       }
    );
 
 }());
