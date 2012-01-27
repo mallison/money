@@ -80,5 +80,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
-    'money'
+    'money',
+    'django_extensions'
 )
