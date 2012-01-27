@@ -1,5 +1,6 @@
 import datetime
 
+from django.db.models import Min, Max
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -16,6 +17,7 @@ from money.transaction import totals_for_tags, in_and_out
 # TODO: class based generic view for home and untagged!
 def home(request):
     transactions = models.Transaction.objects.all()
+    date_range = transactions.aggregate(Min('date'), Max('date'))
     try:
         days = int(request.GET.get('days'))
     except (TypeError, ValueError):
@@ -28,6 +30,7 @@ def home(request):
         'money/home.html',
         {'transactions': transactions,
          'tags': models.Tag.objects.order_by('name'),
+         'date_range': date_range,
          'totals_for_tags': totals_for_tags(transactions),
          'in_and_out': in_and_out(transactions)})
 
