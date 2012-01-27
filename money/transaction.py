@@ -1,17 +1,22 @@
 """Helper functions for handling sets of transactions"""
 
+from django.db.models import Sum
+
 from money import models
 
 
 def totals_for_tags(transactions):
-    for tag in models.Tag.objects.all():
-        tagged_transactions = transactions.filter(
-            tags=tag).values_list('amount', flat=True)
-        yield (tag, sum(tagged_transactions) / 100.0)
-    untagged = transactions.filter(tags__isnull=True).values_list(
-        'amount', flat=True)
-    if untagged.count():
-        yield ({'name': 'misc'}, sum(untagged) / 100.0)
+    for name, total in (
+        models.Tag.objects
+        .filter(transaction__in=transactions)
+        .distinct()
+        .annotate(sum=Sum('transaction__amount'))
+        .order_by('sum')
+        .values_list('name', 'sum')
+    ):
+        # TODO can I do the math in the query?
+        yield name, total / 100.0
+        # TODO untagged transactions
 
 
 def in_and_out(transactions):
