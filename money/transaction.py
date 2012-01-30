@@ -2,12 +2,12 @@
 
 from django.db.models import Sum
 
-from money import models
+from money.models import Payment, Tag
 
 
 def totals_for_tags(transactions):
     for name, total in (
-        models.Tag.objects
+        Tag.objects
         .filter(transaction__in=transactions)
         .distinct()
         .annotate(sum=Sum('transaction__amount'))
@@ -31,3 +31,15 @@ def in_and_out(transactions):
     yield -sum(
         transactions.filter(tags__name="savings")
         .values_list('amount', flat=True)) / 100
+
+
+def remaining_outgoings(transaction):
+    """
+    Calculates outgoings remaining after this transaction
+
+    Arguments:
+    - `transaction`:
+    """
+    remaining = Payment.objects.filter(
+        day_of_month__gt=transaction.date.day).aggregate(total=Sum('amount'))
+    return remaining['total'] or 0

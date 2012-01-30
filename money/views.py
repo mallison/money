@@ -11,13 +11,17 @@ from django.views.decorators.csrf import csrf_exempt
 # it in appengine examples)
 import loading
 import models
-from money.transaction import totals_for_tags, in_and_out
+from money.transaction import totals_for_tags, in_and_out, remaining_outgoings
 
 
 # TODO: class based generic view for home and untagged!
 def home(request):
     transactions = models.Transaction.objects.all()
     date_range = transactions.aggregate(Min('date'), Max('date'))
+    last_transaction = transactions[0]
+    current_balance = last_transaction.balance()
+    balance_after_remaining_outgoings = (
+        current_balance - remaining_outgoings(last_transaction)) / 100.0
     try:
         days = int(request.GET.get('days'))
     except (TypeError, ValueError):
@@ -31,6 +35,7 @@ def home(request):
         {'transactions': transactions,
          'tags': models.Tag.objects.order_by('name'),
          'date_range': date_range,
+         'balance_after_remaining_outgoings': balance_after_remaining_outgoings,
          'totals_for_tags': totals_for_tags(transactions),
          'in_and_out': in_and_out(transactions)})
 

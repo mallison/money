@@ -12,3 +12,4 @@ admin.site.register(models.Transaction,
                     date_hierarchy='date',
                     list_filter=('date',))
 admin.site.register(models.Tag)
+admin.site.register(models.Payment)

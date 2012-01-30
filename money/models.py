@@ -53,3 +53,13 @@ class Tag(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class Payment(models.Model):
+    """
+    Regular payment from an account
+    """
+    payee = models.CharField(max_length=255)
+    # TODO support start, stop, frequency etc.
+    day_of_month = models.PositiveIntegerField()
+    amount = models.PositiveIntegerField()
