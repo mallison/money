@@ -4,6 +4,7 @@ import models
 
 class TransactionInline(admin.StackedInline):
     model = models.Transaction
+    extra = 1
 
 admin.site.register(models.Account, inlines=[TransactionInline])
 admin.site.register(models.Transaction,

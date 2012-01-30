@@ -20,7 +20,7 @@ class Transaction(models.Model):
     memo = models.TextField()
     description = models.TextField()
     note = models.TextField(blank=True)
-    tags = models.ManyToManyField('Tag')
+    tags = models.ManyToManyField('Tag', blank=True)
 
     class Meta:
         ordering = ('-date', '-memo')
