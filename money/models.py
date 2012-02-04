@@ -18,7 +18,7 @@ class Transaction(models.Model):
     date = models.DateField()
     amount = models.IntegerField()  # in pence
     memo = models.TextField()
-    description = models.TextField()
+    description = models.TextField(blank=True)
     note = models.TextField(blank=True)
     tags = models.ManyToManyField('Tag', blank=True)
 
