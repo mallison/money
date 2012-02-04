@@ -51,13 +51,36 @@
              <th>tags</th>
          </tr>
          {% for transaction in transactions %}
-             <tr class="{{ transaction.tags.all|join:" " }}">
+             <tr class="{% spaceless %}{% for pk, name in transaction.tags %}{{ name }} {% endfor %}{% endspaceless %}">
                  <td>{{ transaction.date|date:"d F Y" }}</td>
                  <td>{{ transaction.memo|linebreaks }}</td>
-                 <td class="amount">{{ transaction.display_amount }}</td>
-                 <td class="amount">{{ transaction.display_balance }}</td>
-                 <td class="note editable">{% include "money/note_snippet.html" %}</td>
-                 <td class="editable">{% include "money/tags_snippet.html" %}</td>
+                 <td class="amount">{{ transaction.amount|floatformat:"2" }}</td>
+                 <td class="amount">{{ transaction.balance|floatformat:"2" }}</td>
+                 <td class="note editable">
+                     <span class="display{% if not transaction.note %} hidden {% endif %}">{{ transaction.note }}</span>                 
+                     <div class="control_container{% if transaction.note %} hidden {% endif %}">
+                         <form action="save/note/">
+                             <textarea name="note" class="control" rows="3" cols="20">{{ transaction.note }}</textarea>
+                             <p><a class="save" href="save">save</a> | 
+                                 <a class="close" href="close">close</a></p>
+                             <input type="hidden" name="transaction" value="{{ transaction.pk }}">
+                         </form>
+                     </div>
+                 </td>
+                 <td class="editable">
+                     <span class="display {% if not transaction.tags %} hidden {% endif %}">{% for pk, name in transaction.tags %}{{ name }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+                     <div class="control_container{% if transaction.tags %} hidden {% endif %}">
+                         <form action="/save/tags/">
+                             <select name="tags" class="control" multiple="multiple">
+                                 {% for tag in tags %}
+                                 <option{% for pk, name in transaction.tags %}{% ifequal pk tag.pk %} selected="selected"{% endifequal %}{% endfor %} value="{{ tag.pk }}">{{ tag.name }}</option>
+                                 {% endfor %}
+                             </select>
+                             <p><a class="save" href="save">save</a> | <a class="close" href="close">close</a></p>
+                             <input type="hidden" name="transaction" value="{{ transaction.pk }}">
+                         </form>
+                     </div>
+                 </td>
              </tr>
          {% endfor %}
     </table>
