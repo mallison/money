@@ -2,7 +2,7 @@ import datetime
 
 from django.db.models import Min, Max
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 # TODO: figure out csrf with ajax, csrf_exempt is a temp hack for now
 from django.views.decorators.csrf import csrf_exempt
@@ -118,20 +118,19 @@ def save_tags(request):
 def summary(request, year):
     transactions = models.Transaction.objects.filter(date__year=year)
     months = []
-    for month in xrange(1, 12):
+    for month in xrange(1, 13):
         transactions_for_month = transactions.filter(date__month=month)
         months.append(
             {'name': datetime.date(2012, month, 1).strftime("%B"),
              'summary': in_and_out(transactions_for_month),
              'tags': totals_for_tags(transactions_for_month),
              })
-    # TODO: what's the new way to render to a template?
-    return render_to_response(
-        'money/summary.txt',
+    return render(
+        request,
+        'money/summary.html',
         {'year': year,
          'summary': in_and_out(transactions),
          'tags': totals_for_tags(transactions),
          'months': months
          },
-        mimetype="text/plain",
         )

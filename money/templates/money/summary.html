@@ -1,0 +1,41 @@
+{% extends "money/base.html" %}
+
+{% block content %}
+
+<h1>Summary for {{ year }}</h1>
+
+<table cellspacing="1" cellpadding="0" border="1">
+    <tr>
+        <td>in</td><td>{{ summary.next }}</td>
+    </tr>
+    <tr>
+{% with summary.next as out %}
+        <td>out</td>
+        <td>
+            <div> <!-- style="width: {% widthratio out out 500 %}px; background-color: #c00" class="some_class" -->
+                {{ out }}
+            </div> 
+        </td>
+    </tr>
+    {% for tag, amount in tags %}
+    <tr>
+        <td>{{ tag }}</td>
+        <td>
+            <div style="width: {% widthratio amount out 2000 %}px; background-color: #c00" class="some_class">
+                {{ amount }}
+            </div> 
+        </td>
+        <td>{% widthratio amount 12 1 %}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endwith %}
+<!-- --------- -->
+<!-- {% for month in months %} -->
+<!-- {{ month.name }} -->
+<!-- in: {{ month.summary.next }} -->
+<!-- out: {{ month.summary.next }}{% for tag, amount in month.tags %}{% if amount > 0 %} -->
+<!-- {{ tag }}: {{ amount }}{% endif %}{% endfor %} -->
+<!-- {% endfor %} -->
+
+{% endblock %}
