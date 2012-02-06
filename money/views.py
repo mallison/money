@@ -16,8 +16,9 @@ from money.transaction import totals_for_tags, in_and_out, remaining_outgoings
 
 # TODO: class based generic view for home and untagged!
 def home(request):
-    transactions = models.Transaction.objects.all()
-    date_range = transactions.aggregate(Min('date'), Max('date'))
+    now =  datetime.date.today()
+    transactions = models.Transaction.objects.filter(
+        date__month=now.month, date__year=now.year)
     last_transaction = transactions[0]
     current_balance = last_transaction.balance()
     balance_after_remaining_outgoings = (
@@ -49,6 +50,7 @@ def home(request):
             r['tags'] = [(r['tags__pk'], r['tags__name'])]
             grouped.append(r)
 
+    date_range = transactions.aggregate(Min('date'), Max('date'))
     return render_to_response(
         'money/home.html',
         {'transactions': grouped,
