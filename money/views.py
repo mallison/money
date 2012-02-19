@@ -112,6 +112,10 @@ def save_tags(request):
     transaction.tags = models.Tag.objects.filter(
         id__in=request.POST.getlist('tags'))
     transaction.save()
+    # tags_snippet expects a dict not an instance
+    # (this is a consequence of using .values() for performance in the home view)
+    transaction = {'pk': transaction.pk,
+                   'tags': [(tag.pk, tag.name) for tag in transaction.tags.all()]}
     return render_to_response('money/tags_snippet.html',
                               {'transaction': transaction,
                                'tags': models.Tag.objects.all()})
