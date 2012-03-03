@@ -1,0 +1,26 @@
+* TODO tag types
+
+e.g. monthly, one-off ??
+
+* TODO flag transactions
+
+might be unsure of tag, say, so flag to look at later
+
+* TODO add 'events'
+
+maybe just a flag on a a Tag to say it's an event
+
+* TODO sub-tags
+
+just one level for sanity
+
+e.g.
+
+holiday
+ - kavos
+ - lake louise
+
+beer
+ - my birthday
+
+* TODO calendar view which shows which days money was spent on a certain tag

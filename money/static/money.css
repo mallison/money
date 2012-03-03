@@ -1,0 +1,32 @@
+body { font-family: sans-serif; font-size: 75% }
+table { font-size: 100% }
+th { text-align: left; border-bottom: 1px dotted black }
+td { 
+    vertical-align: top;
+    padding: 0 1em .5em 0;
+}
+td.amount, th.amount { 
+    text-align: right;
+}
+#main {
+    width: 70%;
+}
+#main table {
+    width: 100%;
+}
+#main tr:nth-child(even) {
+    background-color: #ccc;
+}
+td.amount { font-family: monospace; font-size: 120% }
+.hidden { display: none }
+p { margin: 0; padding: 0}
+.close, .save { font-size: 80% }
+.editable .display { border: 1px solid white }
+.editable .display:hover { border: 1px solid black; cursor:pointer }
+.note { width: 15em }
+#main, #related { float: left }
+#related { margin-left: 1em }
+#related td { padding-bottom: 0 }
+th.left { vertical-align: top; border: none }
+tr.misc { background-color: red; color: white; font-weight: bold }
+tr.misc td { vertical-align: middle }

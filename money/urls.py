@@ -1,8 +1,13 @@
 from django.conf.urls.defaults import *
+from django.views.generic.dates import (YearArchiveView,
+                                        MonthArchiveView,
+                                        DayArchiveView)
 
+import models
 import views
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
 
     (r'^$', views.home),
 
@@ -15,4 +20,25 @@ urlpatterns = patterns('',
     (r'^save/note/$', views.save_note),
 
     (r'^save/tags/$', views.save_tags),
+
+    (r'^(?P<year>\d{4})/$', YearArchiveView.as_view(
+            model=models.Transaction,
+            date_field='date',
+            make_object_list=True,
+            template_name="money/transaction_archive.html",
+            )
+     ),
+    (r'^(?P<year>\d{4})/(?P<month>\w{3})/$', MonthArchiveView.as_view(
+            model=models.Transaction,
+            date_field='date',
+            template_name="money/transaction_archive.html",
+            )
+     ),
+    (r'^(?P<year>\d{4})/(?P<month>\w{3})/(?P<day>\d{2})/$',
+     DayArchiveView.as_view(
+            model=models.Transaction,
+            date_field='date',
+            template_name="money/transaction_archive.html",
+            )
+     ),
 )

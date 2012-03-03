@@ -19,6 +19,7 @@ def home(request):
     now =  datetime.date.today()
     transactions = models.Transaction.objects.filter(
         date__month=now.month, date__year=now.year)
+    transactions = models.Transaction.objects.all()
     last_transaction = transactions[0]
     current_balance = last_transaction.balance()
     balance_after_remaining_outgoings = (
