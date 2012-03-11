@@ -4,7 +4,7 @@ from operator import itemgetter
 
 from django.db.models import Sum
 
-from money.models import Payment, Tag, Transaction
+from money.models import Payment, Tag
 
 
 def totals_for_tags(transactions):
