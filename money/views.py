@@ -5,12 +5,20 @@ from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 # TODO: figure out csrf with ajax, csrf_exempt is a temp hack for now
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.dates import ArchiveIndexView
 
 # TODO: not sure this is a good style of import (but Guido seems to do
 # it in appengine examples)
 import loading
 import models
 from money.transaction import totals_for_tags, in_and_out
+
+
+class SincePayDayArchiveView(ArchiveIndexView):
+    def get_queryset(self):
+        queryset = super(SincePayDayArchiveView, self).get_queryset()
+        last_pay_day = queryset.filter(tags__name="salary").order_by('-date')[0]
+        return queryset.filter(date__gte=last_pay_day.date)
 
 
 def untagged(request):

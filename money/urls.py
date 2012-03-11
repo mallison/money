@@ -20,6 +20,14 @@ urlpatterns = patterns(
 
     (r'^save/tags/$', views.save_tags),
 
+    (r'^since_pay_day/$', views.SincePayDayArchiveView.as_view(
+            model=models.Transaction,
+            date_field='date',
+            template_name="money/transaction_archive.html",
+            allow_future=True,
+            )
+     ),
+
     (r'^$', ArchiveIndexView.as_view(
             model=models.Transaction,
             date_field='date',
