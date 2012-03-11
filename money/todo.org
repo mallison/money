@@ -1,3 +1,5 @@
+* TODO remove /save/ urls
+* TODO move js from home.html to js file and delete home.html
 * TODO tag types
 
 e.g. monthly, one-off ??
