@@ -8,6 +8,7 @@ from ..transaction import totals_for_tags, in_and_out, remaining_outgoings
 
 @register.inclusion_tag("money/transactions_snippet.html")
 def transactions(transactions):
+    transactions = transactions.order_by('-date', '-memo')
     last_transaction = transactions[0]
     current_balance = last_transaction.balance()
     balance_after_remaining_outgoings = (
