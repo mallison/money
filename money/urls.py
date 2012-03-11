@@ -1,5 +1,6 @@
-from django.conf.urls.defaults import *
-from django.views.generic.dates import (YearArchiveView,
+from django.conf.urls.defaults import patterns
+from django.views.generic.dates import (ArchiveIndexView,
+                                        YearArchiveView,
                                         MonthArchiveView,
                                         DayArchiveView)
 
@@ -8,8 +9,6 @@ import views
 
 urlpatterns = patterns(
     '',
-
-    (r'^$', views.home),
 
     (r'^untagged/$', views.untagged),
 
@@ -20,6 +19,13 @@ urlpatterns = patterns(
     (r'^save/note/$', views.save_note),
 
     (r'^save/tags/$', views.save_tags),
+
+    (r'^$', ArchiveIndexView.as_view(
+            model=models.Transaction,
+            date_field='date',
+            template_name="money/transaction_archive.html",
+            )
+     ),
 
     (r'^(?P<year>\d{4})/$', YearArchiveView.as_view(
             model=models.Transaction,
