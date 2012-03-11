@@ -24,6 +24,7 @@ urlpatterns = patterns(
             model=models.Transaction,
             date_field='date',
             template_name="money/transaction_archive.html",
+            allow_future=True,
             )
      ),
 
