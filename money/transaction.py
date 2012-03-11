@@ -29,9 +29,9 @@ def in_and_out(transactions):
     for selector in ('amount__gte', 'amount__lt'):
         filtered_transactions = transactions.filter(
             **{selector: 0}
-            #   ).exclude(
-            # # exclude savings as it's not income
-            # tags__name="savings"
+              ).exclude(
+            # exclude savings as it's not income
+            tags__name="savings"
             ).values_list('amount', flat=True)
         # TODO: no ORM way to do the summing?
         yield sum(filtered_transactions) / 100.0
