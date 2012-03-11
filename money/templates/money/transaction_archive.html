@@ -4,7 +4,7 @@
 {% block content %}
 <h1>{% if not year and not month and not day %}All{% endif %}{{ year }}{{ month }}{{ day }}</h1>
 
-<p><a href="../">{% if month %}{{ month|date:"Y" }}{% endif %}{% if day %}{{ day|date:"b" }}{% endif %}</a></p>
+<p>{% if year or month or day %}<a href="../">Up{% endif %}
 <p>
     {% for date in date_list %}
     {% if year %}
