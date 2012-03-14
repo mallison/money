@@ -82,7 +82,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'money',
-    'django_extensions'
+    'django_extensions',
+    'south',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
