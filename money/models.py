@@ -21,6 +21,7 @@ class Transaction(models.Model):
     description = models.TextField(blank=True)
     note = models.TextField(blank=True)
     tags = models.ManyToManyField('Tag', blank=True)
+    created = models.DateField(auto_now_add=True)
 
     class Meta:
         ordering = ('-date', '-memo')
