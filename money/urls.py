@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import patterns
+from django.views.generic import RedirectView
 from django.views.generic.dates import (ArchiveIndexView,
                                         YearArchiveView,
                                         MonthArchiveView,
@@ -20,7 +21,9 @@ urlpatterns = patterns(
 
     (r'^save/tags/$', views.save_tags),
 
-    (r'^since_pay_day/$', views.SincePayDayArchiveView.as_view(
+    (r'^$', RedirectView.as_view(url="transactions/since_pay_day/")),
+
+    (r'^transactions/since_pay_day/$', views.SincePayDayArchiveView.as_view(
             model=models.Transaction,
             date_field='date',
             template_name="money/transaction_archive.html",
@@ -28,7 +31,7 @@ urlpatterns = patterns(
             )
      ),
 
-    (r'^$', ArchiveIndexView.as_view(
+    (r'^transactions/$', ArchiveIndexView.as_view(
             model=models.Transaction,
             date_field='date',
             template_name="money/transaction_archive.html",
@@ -36,20 +39,20 @@ urlpatterns = patterns(
             )
      ),
 
-    (r'^(?P<year>\d{4})/$', YearArchiveView.as_view(
+    (r'^transactions/(?P<year>\d{4})/$', YearArchiveView.as_view(
             model=models.Transaction,
             date_field='date',
             make_object_list=True,
             template_name="money/transaction_archive.html",
             )
      ),
-    (r'^(?P<year>\d{4})/(?P<month>\w{3})/$', MonthArchiveView.as_view(
+    (r'^transactions/(?P<year>\d{4})/(?P<month>\w{3})/$', MonthArchiveView.as_view(
             model=models.Transaction,
             date_field='date',
             template_name="money/transaction_archive.html",
             )
      ),
-    (r'^(?P<year>\d{4})/(?P<month>\w{3})/(?P<day>\d{2})/$',
+    (r'^transactions/(?P<year>\d{4})/(?P<month>\w{3})/(?P<day>\d{2})/$',
      DayArchiveView.as_view(
             model=models.Transaction,
             date_field='date',
