@@ -1,6 +1,6 @@
                      <span class="display{% if not transaction.note %} hidden {% endif %}">{{ transaction.note }}</span>                 
                      <div class="control_container{% if transaction.note %} hidden {% endif %}">
-                         <form action="save/note/">
+                         <form action="/save/note/">
                              <textarea name="note" class="control" rows="3" cols="20">{{ transaction.note }}</textarea>
                              <p><a class="save" href="save">save</a> | 
                                  <a class="close" href="close">close</a></p>
