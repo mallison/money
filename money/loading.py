@@ -26,7 +26,7 @@ def parse_pasted_barclays_online_statement(data):
     transactions = []
     lines = data.splitlines()
     while lines:
-        line = lines.pop(0)
+        line = lines.pop(0).strip()
         fields = [f.strip() for f in line.split('\t')]
         transactions.append(
             {'date': clean_date(fields[0]),
