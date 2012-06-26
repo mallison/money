@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns
+from django.conf.urls.defaults import patterns, url
 from django.views.generic import RedirectView
 from django.views.generic.dates import (ArchiveIndexView,
                                         YearArchiveView,
@@ -13,7 +13,7 @@ urlpatterns = patterns(
 
     (r'^untagged/$', views.untagged),
 
-    (r'^load/$', views.load),
+    url(r'^load/$', views.load, name="money-load"),
 
     (r'^summary/(\d+)/$', views.summary),
 
@@ -23,20 +23,22 @@ urlpatterns = patterns(
 
     (r'^$', RedirectView.as_view(url="transactions/since_pay_day/")),
 
-    (r'^transactions/since_pay_day/$', views.SincePayDayArchiveView.as_view(
+    url(r'^transactions/since_pay_day/$', views.SincePayDayArchiveView.as_view(
             model=models.Transaction,
             date_field='date',
             template_name="money/transaction_archive.html",
             allow_future=True,
-            )
+            ),
+        name="money-since-pay-day"
      ),
 
-    (r'^transactions/$', ArchiveIndexView.as_view(
+    url(r'^transactions/$', ArchiveIndexView.as_view(
             model=models.Transaction,
             date_field='date',
             template_name="money/transaction_archive.html",
             allow_future=True,
-            )
+            ),
+        name="money-all",
      ),
 
     (r'^transactions/(?P<year>\d{4})/$', YearArchiveView.as_view(
@@ -46,11 +48,12 @@ urlpatterns = patterns(
             template_name="money/transaction_archive.html",
             )
      ),
-    (r'^transactions/(?P<year>\d{4})/(?P<month>\w{3})/$', MonthArchiveView.as_view(
+    url(r'^transactions/(?P<year>\d{4})/(?P<month>\w{3})/$', MonthArchiveView.as_view(
             model=models.Transaction,
             date_field='date',
             template_name="money/transaction_archive.html",
-            )
+            ),
+        name="money-month-archive"
      ),
     (r'^transactions/(?P<year>\d{4})/(?P<month>\w{3})/(?P<day>\d{2})/$',
      DayArchiveView.as_view(
@@ -60,5 +63,5 @@ urlpatterns = patterns(
             )
      ),
 
-    (r'^activity/$', views.activity)
+    url(r'^activity/$', views.activity, name="money-activity")
 )

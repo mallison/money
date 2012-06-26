@@ -2,7 +2,7 @@
 {% load money %}
 
 {% block content %}
-<h1>{% if not year and not month and not day %}All{% endif %}{{ year }}{{ month }}{{ day }}</h1>
+<h1>{% if not year and not month and not day and not title  %}All{% endif %}{{ year }}{{ month }}{{ day }}{{ title }}</h1>
 
 <p>{% if year or month or day %}<a href="../">Up{% endif %}
 <p>
@@ -13,7 +13,10 @@
     {% if month %}
         <a href="{{ date|date:"d" }}/">{{ date|date:"d" }}</a> 
     {% endif %}
-    {% if not year and not month %}
+    {% if up %}
+        <a href="{{ up }}">{{ up_text }}</a> 
+    {% endif %}
+    {% if not year and not month and not up %}
         <a href="{{ date|date:"Y" }}/">{{ date|date:"Y" }}</a> 
     {% endif %}
     {% endfor %}

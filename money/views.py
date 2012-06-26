@@ -1,6 +1,7 @@
 import calendar
 import datetime
 
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
@@ -40,8 +41,16 @@ class Calendar(calendar.HTMLCalendar):
 class SincePayDayArchiveView(ArchiveIndexView):
     def get_queryset(self):
         queryset = super(SincePayDayArchiveView, self).get_queryset()
-        last_pay_day = queryset.filter(tags__name="salary").order_by('-date')[0]
-        return queryset.filter(date__gte=last_pay_day.date)
+        self.last_pay_day = queryset.filter(tags__name="salary").order_by('-date')[0]
+        return queryset.filter(date__gte=self.last_pay_day.date)
+
+    def get_context_data(self, **kwargs):
+        context = super(SincePayDayArchiveView, self).get_context_data(**kwargs)
+        context['title'] = 'Since pay-day'
+        month = context['up_text'] = self.last_pay_day.date.strftime('%b').lower()
+        context['up'] = reverse('money-month-archive',
+                                args=(self.last_pay_day.date.year, month))
+        return context
 
 
 def untagged(request):

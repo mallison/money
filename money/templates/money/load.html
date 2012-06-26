@@ -1,3 +1,6 @@
+{% extends "money/base.html" %}
+
+{% block content %}
 <h1>Load transactions</h1>
 
 {% if errors %}
@@ -13,3 +16,4 @@
     <p><input type="submit" value="go"></p>
     {% csrf_token %}
 </form>
+{% endblock %}
