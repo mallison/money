@@ -14,7 +14,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(os.path.dirname(__file__), 'db', 'money')
+        'NAME': os.path.expanduser('~/Dropbox/data/money')
         }
     }
 # Local time zone for this installation. Choices can be found here:
