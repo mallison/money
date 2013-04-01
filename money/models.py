@@ -1,7 +1,8 @@
+from django.conf import settings
 from django.db import models
 from django.db.models import Q
 
-INITIAL_BALANCE = 173886
+INITIAL_BALANCE = settings.INITIAL_BALANCE
 
 
 class Account(models.Model):

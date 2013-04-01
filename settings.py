@@ -88,3 +88,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages")
 
 STATIC_URL = '/static/'
+
+INITIAL_BALANCE = 173886
