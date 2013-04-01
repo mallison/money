@@ -1,5 +1,4 @@
 from django.conf.urls.defaults import patterns, url
-from django.views.generic import RedirectView
 from django.views.generic.dates import (ArchiveIndexView,
                                         YearArchiveView,
                                         MonthArchiveView,
@@ -21,7 +20,7 @@ urlpatterns = patterns(
 
     (r'^save/tags/$', views.save_tags),
 
-    (r'^$', RedirectView.as_view(url="transactions/since_pay_day/")),
+    (r'^$', views.this_month),
 
     url(r'^transactions/since_pay_day/$', views.SincePayDayArchiveView.as_view(
             model=models.Transaction,
