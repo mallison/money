@@ -7,31 +7,7 @@ class BlankLine(Exception):
     pass
 
 
-def clean_date(date):
-    try:
-        return '%s-%s-%s' % tuple(date.split('/')[::-1])
-    except:
-        return datetime.datetime.strptime(date, '%d %b %y')
-
-
-def clean_amount(amount):
-    amount = amount.strip()
-    if amount:
-        amount = int(amount.replace(u'\u00a3', '').
-                     replace(',', '').
-                     replace('.', ''))
-    return amount
-
-
-def add_detail(transactions, lines):
-    line = lines.pop(0)
-    line = line.strip()
-    if not line:
-        raise BlankLine
-    transactions[-1]['memo'] += '\n' + line
-
-
-def parse_pasted_barclays_online_statement(data):
+def barlcays(data):
     barclays = Account.objects.get(name="Barclays current account")
     transactions = []
     lines = data.splitlines()
@@ -51,7 +27,15 @@ def parse_pasted_barclays_online_statement(data):
     return transactions
 
 
-def parse_pasted_santander_online_statement(data):
+def add_detail(transactions, lines):
+    line = lines.pop(0)
+    line = line.strip()
+    if not line:
+        raise BlankLine
+    transactions[-1]['memo'] += '\n' + line
+
+
+def santander(data):
     santander = Account.objects.get(name="Santander current account")
     transactions = []
     lines = data.splitlines()
@@ -66,7 +50,7 @@ def parse_pasted_santander_online_statement(data):
     return transactions
 
 
-def parse_pasted_virgin_online_statement(data):
+def virgin(data):
     account = Account.objects.get(name="Virgin savings")
     transactions = []
     lines = data.splitlines()
@@ -82,7 +66,7 @@ def parse_pasted_virgin_online_statement(data):
     return transactions
 
 
-def parse_pasted_westbrom_online_statement(data):
+def westbrom(data):
     account = Account.objects.get(name="West Brom savings")
     transactions = []
     lines = data.splitlines()
@@ -98,7 +82,7 @@ def parse_pasted_westbrom_online_statement(data):
     return transactions
 
 
-def parse_pasted_halifax_online_statement(data):
+def halifax(data):
     account = Account.objects.get(name="Halifax Clarity")
     transactions = []
     lines = data.splitlines()
@@ -118,3 +102,19 @@ def parse_pasted_halifax_online_statement(data):
                     'amount': -clean_amount(amount)
                     })
     return transactions
+
+
+def clean_date(date):
+    try:
+        return '%s-%s-%s' % tuple(date.split('/')[::-1])
+    except:
+        return datetime.datetime.strptime(date, '%d %b %y')
+
+
+def clean_amount(amount):
+    amount = amount.strip()
+    if amount:
+        amount = int(amount.replace(u'\u00a3', '').
+                     replace(',', '').
+                     replace('.', ''))
+    return amount

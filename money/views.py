@@ -84,13 +84,13 @@ def load(request):
     if request.method == 'POST':
         account = account.lower()
         if 'santander' in account:
-            parser = loading.parse_pasted_santander_online_statement
+            parser = loading.santander
         elif 'virgin' in account:
-            parser = loading.parse_pasted_virgin_online_statement
+            parser = loading.virgin
         elif 'west brom' in account:
-            parser = loading.parse_pasted_westbrom_online_statement
+            parser = loading.westbrom
         elif 'halifax' in account:
-            parser = loading.parse_pasted_halifax_online_statement
+            parser = loading.halifax
         # TODO Barclaycard
         pasted_data = request.POST.get('pasted_data')
         try:
