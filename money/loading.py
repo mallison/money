@@ -96,3 +96,25 @@ def parse_pasted_westbrom_online_statement(data):
              'memo': memo,
              'amount': clean_amount(amount_in) or -clean_amount(amount_out)})
     return transactions
+
+
+def parse_pasted_halifax_online_statement(data):
+    account = Account.objects.get(name="Halifax Clarity")
+    transactions = []
+    lines = data.splitlines()
+    while lines:
+        line = lines.pop(0).strip()
+        if not line:
+            continue
+        try:
+            date, memo = line.split('\t')
+        except ValueError:
+            ref, _date, amount = line.split('\t')
+            transactions.append(
+                {
+                    'date': clean_date(date),
+                    'account': account,
+                    'memo': memo,
+                    'amount': -clean_amount(amount)
+                    })
+    return transactions

@@ -114,7 +114,9 @@ def load(request):
             parser = loading.parse_pasted_virgin_online_statement
         elif 'west brom' in account:
             parser = loading.parse_pasted_westbrom_online_statement
-        # TODO Halifax, Barclaycard
+        elif 'halifax' in account:
+            parser = loading.parse_pasted_halifax_online_statement
+        # TODO Barclaycard
         pasted_data = request.POST.get('pasted_data')
         try:
             transactions = parser(pasted_data)
