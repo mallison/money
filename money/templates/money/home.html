@@ -9,6 +9,7 @@
     {% for date, total in months %}
     <th><a href="{% url money-month-archive date.year date|date:"b" %}">{{ date|date:"F" }}</a></th>
     {% endfor %}
+    <th>Year to date</th>
   </tr>
   <tr>
     {% for date, total in months %}
