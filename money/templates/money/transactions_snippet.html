@@ -1,34 +1,4 @@
 {% load money %}
-<div id="transactions">
-  <table id="transaction-list">
-    <tr>
-      <th>date</th>
-      <th>account</th>
-      <th>memo</th>
-      <th class="amount">amount</th>
-      <th class="amount">account balance</th>
-      <th class="amount">total balance</th>
-      <th>note</th>
-      <th>tags</th>
-    </tr>
-    {% for transaction in transactions %}
-    <tr class="{% spaceless %}{% for tag in transaction.tags.all %}{{ tag.name }} {% empty %}misc{% endfor %}{% endspaceless %} {{ transaction.account.name|slugify }} {% if transaction.tags.all.0.name != "transfer" %}{% if transaction.amount < 0 %}out{% else %}in{% endif %}{% endif %}">
-      <td>{{ transaction.date|date:"d F Y" }}</td>
-      <td>{{ transaction.account.name }}</td>
-      <td>{{ transaction.memo|linebreaks }}</td>
-      <td class="amount">{{ transaction.amount|pretty_amount }}</td>
-      <td class="amount">{{ transaction.account_balance|pretty_amount }}</td>
-      <td class="amount">{{ transaction.total_balance|pretty_amount }}</td>
-      <td class="note editable">
-        {% include "money/note_snippet.html" %}
-      </td>
-      <td class="editable">
-        {% include "money/tags_snippet.html" %}
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
-</div>
 <div id="related">
   <a id="show-all" href="">Show all</a>
 
@@ -68,4 +38,34 @@
       {% endif %}
       {% endfor %}
     </table>
+</div>
+<div id="transactions">
+  <table id="transaction-list">
+    <tr>
+      <th>Date</th>
+      <th>Account</th>
+      <th>Memo</th>
+      <th class="amount">Amount</th>
+      <th class="amount">Account balance</th>
+      <th class="amount">Total balance</th>
+      <th>Note</th>
+      <th>Tags</th>
+    </tr>
+    {% for transaction in transactions %}
+    <tr class="{% spaceless %}{% for tag in transaction.tags.all %}{{ tag.name }} {% empty %}misc{% endfor %}{% endspaceless %} {{ transaction.account.name|slugify }} {% if transaction.tags.all.0.name != "transfer" %}{% if transaction.amount < 0 %}out{% else %}in{% endif %}{% endif %}">
+      <td>{{ transaction.date|date:"d F Y" }}</td>
+      <td>{{ transaction.account.name }}</td>
+      <td>{{ transaction.memo|linebreaks }}</td>
+      <td class="amount">{{ transaction.amount|pretty_amount }}</td>
+      <td class="amount">{{ transaction.account_balance|pretty_amount }}</td>
+      <td class="amount">{{ transaction.total_balance|pretty_amount }}</td>
+      <td class="note editable">
+        {% include "money/note_snippet.html" %}
+      </td>
+      <td class="editable">
+        {% include "money/tags_snippet.html" %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
 </div>

@@ -2,10 +2,10 @@
 {% load money %}
 
 {% block content %}
-<h1>{% if not year and not month and not day and not title  %}All{% endif %}{{ year }}{{ month }}{{ day }}{{ title }} &ndash; {{ transaction_list.count }} transactions</h1>
+<h1>{% if not year and not month and not day and not title  %}All{% endif %}{{ year }}{{ month }}{{ day }}{{ title }} &ndash; {{ transaction_list.count }} transactions
 
-<p>{% if year or month or day %}<a href="../">Up{% endif %}
-<p>
+<small><small>{% if year or month or day %}<a href="../">Up{% endif %}
+
     {% for date in date_list %}
     {% if year %}
         <a href="{{ date|date:"b" }}/">{{ date|date:"b" }}</a> 
@@ -20,7 +20,8 @@
         <a href="{{ date|date:"Y" }}/">{{ date|date:"Y" }}</a> 
     {% endif %}
     {% endfor %}
-</p>
-
+</small>
+</small>
+</h1>
 {% transactions object_list %}
 {% endblock %}

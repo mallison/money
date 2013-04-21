@@ -27,8 +27,10 @@ header a {
 }
 table { font-size: 100% }
 th { text-align: left; border-bottom: 1px dotted black }
-td {
+#transactions td {
     vertical-align: top;
+}
+td {
     padding: 0 1em .5em 0;
 }
 td.amount, th.amount {
@@ -38,7 +40,13 @@ td.amount, th.amount {
     width: 100%;
 }
 #transactions {
-    width: 70%;
+    width: 60%;
+    float: right;
+    margin-right: 30px;
+}
+#related {
+    width: 30%;
+    float: left;
 }
 #main table {
     width: 100%;
@@ -53,7 +61,6 @@ p { margin: 0; padding: 0}
 .close, .save { font-size: 80% }
 .editable:hover { background-color: rgb(27,224,96); cursor:pointer }
 .note { width: 15em }
-#transactions, #related { float: left }
 #related { margin-left: 1em }
 #related td { padding-bottom: 1em 0 0 0 }
 th.left { vertical-align: top; border: none }
@@ -62,4 +69,10 @@ tr.misc td { vertical-align: middle }
 body>section {padding: .5em}
 #transactions td {
     padding: 1em;
+}
+#transactions {
+    font-size: 90%;
+}
+#related {
+    font-size: 120%;
 }

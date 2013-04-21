@@ -26,7 +26,6 @@
 
 <div style="margin:auto;width:50%">
   <table style="width:auto;margin:auto;font-size:1.5em;float:left">
-    <caption>Current balances</caption>
     {% for account, balance, latest_transaction in balances %}
     {% if account != "TOTAL" %}
     <tr>
@@ -41,7 +40,6 @@
   </table>
 
   <table style="width:auto;margin:auto;font-size:1.2em;float:right">
-    <caption>Avergae spending per category per month</caption>
     {% for tag, amount in tags %}
     <tr>
       <td>{{ tag }}</td>
