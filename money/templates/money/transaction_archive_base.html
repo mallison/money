@@ -1,7 +1,0 @@
-<h1>{{ heading }}  {{ transaction_list.count }} transactions</h1>
-
-<p>{% for date in date_list %}<a href="{{ date|date:"m" }}/">{{ date }}</a> {% endfor %}</p>
-
-    {% with transaction_list as transactions %}
-    {% include "money/transactions_snippet.html" %}
-    {% endwith %}
