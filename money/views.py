@@ -193,10 +193,3 @@ def activity(request):
         'money/activity.html',
         {'calendar': Calendar(dates).formatyear(2013)}
         )
-
-
-def this_month(request):
-    today = datetime.date.today()
-    return HttpResponseRedirect(reverse(
-            'money-month-archive',
-            args=(today.year, today.strftime('%b').lower())))

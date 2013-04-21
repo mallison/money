@@ -23,8 +23,6 @@ urlpatterns = patterns(
 
     (r'^save/tags/$', views.save_tags),
 
-    (r'^$', views.this_month),
-
     url(r'^transactions/$', ArchiveIndexView.as_view(
             model=models.Transaction,
             date_field='date',
