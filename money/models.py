@@ -15,7 +15,8 @@ class Account(models.Model):
 
 
 class Transaction(models.Model):
-    account = models.ForeignKey(Account, null=True, related_name="transactions")
+    account = models.ForeignKey(
+        Account, null=True, related_name="transactions")
     date = models.DateField()
     amount = models.IntegerField()  # in pence
     memo = models.TextField()
