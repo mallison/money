@@ -3,18 +3,13 @@ from django import template
 
 register = template.Library()
 
-from ..models import Tag, Account, Transaction
-from ..transaction import totals_for_tags, in_and_out, remaining_outgoings, account_balances
-from .. import views
+from ..models import Tag
+from ..transaction import totals_for_tags, in_and_out, account_balances
 
 
 @register.inclusion_tag("money/transactions_snippet.html")
 def transactions(transactions):
     transactions = transactions.order_by('-date', '-memo')
-    last_transaction = transactions[0]
-    current_balance = last_transaction.total_balance()
-    balance_after_remaining_outgoings = (
-        current_balance - remaining_outgoings(last_transaction)) / 100.0
     # transaction_values = transactions.values(
     #     'pk', 'date', 'account__name', 'memo', 'amount', 'note', 'tags__pk', 'tags__name')
     # .values on a m2m means we get a record *per* m2m value
@@ -55,7 +50,6 @@ def transactions(transactions):
     return {
         'transactions': transactions,
         'tags': Tag.objects.order_by('name'),
-        'balance_after_remaining_outgoings': balance_after_remaining_outgoings,
         'totals_for_tags': totals_for_tags(transactions),
         'balances': account_balances(transactions),
         'in_and_out': in_and_out(transactions),

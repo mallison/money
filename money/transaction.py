@@ -4,7 +4,7 @@ from operator import itemgetter
 
 from django.db.models import Sum, Max
 
-from money.models import Payment, Tag, Account, Transaction
+from money.models import Tag, Account, Transaction
 
 
 def totals_for_tags(transactions):
@@ -69,15 +69,3 @@ def account_balances(transactions):
          )
         )
     return balances
-
-
-def remaining_outgoings(transaction):
-    """
-    Calculates outgoings remaining after this transaction
-
-    Arguments:
-    - `transaction`:
-    """
-    remaining = Payment.objects.filter(
-        day_of_month__gt=transaction.date.day).aggregate(total=Sum('amount'))
-    return remaining['total'] or 0
