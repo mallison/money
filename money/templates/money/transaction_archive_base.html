@@ -1,4 +1,4 @@
-<h1>{{ heading }}</h1>
+<h1>{{ heading }}  {{ transaction_list.count }} transactions</h1>
 
 <p>{% for date in date_list %}<a href="{{ date|date:"m" }}/">{{ date }}</a> {% endfor %}</p>
 

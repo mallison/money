@@ -1,19 +1,24 @@
+{% load money %}
 <div id="transactions">
-    <table>
+    <table id="transaction-list">
          <tr>
              <th>date</th>
+             <th>account</th>
              <th>memo</th>
              <th class="amount">amount</th>
-             <th>balance</th>
+             <th class="amount">account balance</th>
+             <th class="amount">total balance</th>
              <th>note</th>
              <th>tags</th>
          </tr>
          {% for transaction in transactions %}
-             <tr class="{% spaceless %}{% for pk, name in transaction.tags %}{{ name }} {% endfor %}{% endspaceless %}">
+             <tr class="{% spaceless %}{% for tag in transaction.tags.all %}{{ tag.name }} {% empty %}misc{% endfor %}{% endspaceless %} {{ transaction.account.name|slugify }} {% if transaction.tags.all.0.name != "transfer" %}{% if transaction.amount < 0 %}out{% else %}in{% endif %}{% endif %}">
                  <td>{{ transaction.date|date:"d F Y" }}</td>
+                 <td>{{ transaction.account.name }}</td>
                  <td>{{ transaction.memo|linebreaks }}</td>
-                 <td class="amount">{{ transaction.amount|floatformat:"2" }}</td>
-                 <td class="amount">{{ transaction.balance|floatformat:"2" }}</td>
+                 <td class="amount">{{ transaction.amount|pretty_amount }}</td>
+                 <td class="amount">{{ transaction.account_balance|pretty_amount }}</td>
+                 <td class="amount">{{ transaction.total_balance|pretty_amount }}</td>
                  <td class="note editable">
                      {% include "money/note_snippet.html" %}
                  </td>
@@ -26,10 +31,13 @@
 </div>
 <div id="related">
      <table>
-         <tr><th class="left">in</th><td class="amount">{{ in_and_out.next|floatformat:2 }}</td></tr>
-         <tr><th class="left">out</th><td class="amount">{{ in_and_out.next|floatformat:2 }}</td></tr>
+         <tr><th class="left">in</th><td class="amount">{{ in_and_out.next|floatformat:2 }}</td>
+           <td><input name="tags" value="in" type="radio"></td>
+         </tr>
+         <tr><th class="left">out</th><td class="amount">{{ in_and_out.next|floatformat:2 }}</td>
+           <td><input name="tags" value="out" type="radio"></td>
+         </tr>
          <tr><th class="left">difference</th><td class="amount">{{ in_and_out.next|floatformat:2 }}</td></tr>
-         <tr><th class="left">savings</th><td class="amount">{{ in_and_out.next|floatformat:2 }}</td></tr>
      </table>
      <a id="show-all" href="">Show all</a>
      <table>
@@ -45,6 +53,19 @@
 	    </td>
 	  </tr>
          {% endif %}
+     {% endfor %}
+     </table>
+     <table>
+     <tr><th>account</th><th class="amount">balance</th></tr>
+     {% for account, balance in balances %}
+          <tr class="{{ account|slugify }}">
+	    <td>
+	      <label for="{{ account }}">{{ account }}</label>
+	    </td>
+	    <td class="amount">
+	      <label>{{ balance|floatformat:2 }}<input id="{{ tag }}" name="tags" type="radio" value="{{ account|slugify }}" /></label>
+	    </td>
+	  </tr>
      {% endfor %}
      </table>
 </div>

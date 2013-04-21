@@ -2,18 +2,20 @@ import calendar
 import datetime
 
 from django.core.urlresolvers import reverse
+from django.db.models import Sum
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 # TODO: figure out csrf with ajax, csrf_exempt is a temp hack for now
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.dates import ArchiveIndexView
+from dateutils import relativedelta
 
 # TODO: not sure this is a good style of import (but Guido seems to do
 # it in appengine examples)
 import loading
 import models
-from money.transaction import totals_for_tags, in_and_out
+from money.transaction import totals_for_tags, in_and_out, account_balances
 
 
 class Calendar(calendar.HTMLCalendar):
@@ -36,6 +38,44 @@ class Calendar(calendar.HTMLCalendar):
             if day in self.transaction_dates:
                 cell = cell.replace('td', 'td style="background-color:blue"')
         return cell
+
+
+def home(request):
+    latest_transaction = models.Transaction.objects.order_by(
+        '-date', '-memo')[0]
+    date = models.Transaction.objects.order_by('date')[0].date
+    months = []
+    while True:
+        months_transactions = models.Transaction.objects.filter(
+            date__month=date.month,
+            date__year=date.year)
+        if not months_transactions.count():
+            break
+        months.append(
+            (
+                datetime.date(date.year, date.month, 1),
+                months_transactions
+                .exclude(tags__name='transfer').aggregate(sum=Sum('amount'))
+                )
+            )
+        date += relativedelta(months=1)
+    tags = totals_for_tags(models.Transaction.objects.all())
+    first = models.Transaction.objects.order_by('date')[0].date
+    last = models.Transaction.objects.order_by('-date')[0].date
+    days = (last - first).days
+    approx_months = days / 30.0
+    for i in range(len(tags)):
+        tags[i] = (tags[i][0], tags[i][1] / approx_months)
+    return render(
+        request, 'money/home.html',
+        {
+            'latest_transaction': latest_transaction,
+            'balances': account_balances(models.Transaction.objects.all()),
+            'months': months,
+            'overall_total': models.Transaction.objects.aggregate(
+                sum=Sum('amount')),
+            'tags': tags,
+            })
 
 
 class SincePayDayArchiveView(ArchiveIndexView):
@@ -65,12 +105,21 @@ def untagged(request):
 
 @csrf_exempt
 def load(request):
+    account = request.GET['account']
     if request.method == 'POST':
+        account = account.lower()
+        if 'santander' in account:
+            parser = loading.parse_pasted_santander_online_statement
+        elif 'virgin' in account:
+            parser = loading.parse_pasted_virgin_online_statement
+        elif 'west brom' in account:
+            parser = loading.parse_pasted_westbrom_online_statement
+        # TODO Halifax, Barclaycard
         pasted_data = request.POST.get('pasted_data')
         try:
-            transactions = loading.parse_pasted_barclays_online_statement(
-                pasted_data)
+            transactions = parser(pasted_data)
         except:
+            raise
             errors = ['Oops']
         else:
             for transaction in transactions:
@@ -81,6 +130,7 @@ def load(request):
         errors = ""
     return render_to_response('money/load.html',
                               {'data': pasted_data,
+                               'account': account,
                                'errors': errors},
                               context_instance=RequestContext(request))
 
@@ -106,8 +156,8 @@ def save_tags(request):
     transaction.save()
     # tags_snippet expects a dict not an instance
     # (this is a consequence of using .values() for performance in the home view)
-    transaction = {'pk': transaction.pk,
-                   'tags': [(tag.pk, tag.name) for tag in transaction.tags.all()]}
+    # transaction = {'pk': transaction.pk,
+    #                'tags': [(tag.pk, tag.name) for tag in transaction.tags.all()]}
     return render_to_response('money/tags_snippet.html',
                               {'transaction': transaction,
                                'tags': models.Tag.objects.all()})

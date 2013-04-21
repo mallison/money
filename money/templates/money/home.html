@@ -1,0 +1,49 @@
+{% extends "money/base.html" %}
+{% load money %}
+
+{% block content %}
+<p style="font-size:8em;text-align:center;">&pound;{{ latest_transaction.total_balance|pretty_amount }}</p>
+<br>
+<table style="width:auto;margin:auto;margin-bottom:.5em;font-size:1.5em">
+  <tr>
+    {% for date, total in months %}
+    <th><a href="{% url money-month-archive date.year date|date:"b" %}">{{ date|date:"F" }}</a></th>
+    {% endfor %}
+  </tr>
+  <tr>
+    {% for date, total in months %}
+    <td class="amount" style="text-align:right">{{ total.sum|pretty_amount }}</td>
+    {% if forloop.last %}<td class="amount" style="text-align:right">{{ overall_total.sum|pretty_amount }}</td>{% endif %}
+    {% endfor %}
+  </tr>
+</table>
+
+<div style="margin:auto;width:50%">
+  <table style="width:auto;margin:auto;font-size:1.5em;float:left">
+    <caption>Current balances</caption>
+    {% for account, balance, latest_transaction in balances %}
+    {% if account != "TOTAL" %}
+    <tr>
+      <td><a href="{% url money-load %}?account={{ account|urlencode }}">{{ account }}</a></td>
+      <td class="amount">
+        {{ balance|floatformat:2 }}
+      </td>
+      <td style="font-size:70%">{{ latest_transaction.date|timesince }}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+  </table>
+
+  <table style="width:auto;margin:auto;font-size:1.2em;float:right">
+    <caption>Avergae spending per category per month</caption>
+    {% for tag, amount in tags %}
+    <tr>
+      <td>{{ tag }}</td>
+      <td class="amount">
+        {{ amount|floatformat:2 }}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

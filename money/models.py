@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.db.models import Q
 
-INITIAL_BALANCE = settings.INITIAL_BALANCE
+INITIAL_BALANCE = sum(settings.INITIAL_BALANCES.values())
 
 
 class Account(models.Model):
@@ -15,7 +15,7 @@ class Account(models.Model):
 
 
 class Transaction(models.Model):
-    account = models.ForeignKey(Account, null=True)
+    account = models.ForeignKey(Account, null=True, related_name="transactions")
     date = models.DateField()
     amount = models.IntegerField()  # in pence
     memo = models.TextField()
@@ -27,13 +27,25 @@ class Transaction(models.Model):
     class Meta:
         ordering = ('-date', '-memo')
 
-    def balance(self):
-        previous = self.__class__.objects.filter(
+    def account_balance(self, max_date=None):
+        previous = self.__class__.objects.filter(account=self.account).filter(
             # TODO: this will be incorrect if two transactions have
             # the same date and memo (but I'm kind of assuming that
             # doesn't happen!)
             Q(date__lt=self.date) | Q(date=self.date) & Q(memo__lte=self.memo)
             ).values_list('amount', flat=True)
+        if max_date:
+            previous = previous.filter(date__lte=max_date)
+        # TODO: can do this with aggregations now
+        return sum(previous) + settings.INITIAL_BALANCES[self.account.name]
+
+    def total_balance(self):
+        previous = self.__class__.objects.filter(
+            # TODO: this will be incorrect if two transactions have
+            # the same date and memo (but I'm kind of assuming that
+            # doesn't happen!)
+            Q(date__lt=self.date) | Q(date=self.date) & Q(memo__lte=self.memo)
+            ).exclude(tags__name="transfer").values_list('amount', flat=True)
         # TODO: can do this with aggregations now
         return sum(previous) + INITIAL_BALANCE
 

@@ -1,15 +1,15 @@
 <!doctype html>
 <html>
-    <head>
+  <head>
+        <title>Money</title>
         <link rel="stylesheet" href="{{STATIC_URL}}/money.css" />
     </head>
     <body>
       <header>
         <nav>
           <ul>
+            <li><a href="/">Home</a></li>
             <li><a href="{% url money-all %}">All</a></li>
-            <li><a href="{% url money-since-pay-day %}">Since pay-day</a></li>
-            <li><a href="{% url money-load %}">Load transactions</a></li>
             <li><a href="{% url money-activity %}">Activity</a></li>
           </ul>
         </nav>

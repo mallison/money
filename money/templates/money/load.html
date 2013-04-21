@@ -1,7 +1,7 @@
 {% extends "money/base.html" %}
 
 {% block content %}
-<h1>Load transactions</h1>
+<h1>Update {{ account }}</h1>
 
 {% if errors %}
     <ul>
@@ -11,7 +11,7 @@
     </ul>
 {% endif %}
 
-<form method="post" action=".">
+<form method="post" action=".?account={{ account|urlencode }}">
     <textarea rows="20" cols="40" name="pasted_data">{{ data }}</textarea>
     <p><input type="submit" value="go"></p>
     {% csrf_token %}

@@ -33,14 +33,14 @@
        // TODO is onchange still broken in IE (element has to lose focus to fire onchange)
        function () {
            // TODO: this is lazy, hiding all then showing one -- use some state!
-           $('#main tr').hide();
-           $('#main tr[class="' + $(this).val() + '"]').show();
+           $('#transaction-list tr').hide();
+           $('tr.' + $(this).val()).show();
        }
    );
    $('#show-all').click(
        function (e) {
            e.preventDefault();
-           $('#main tr').show();
+           $('#transaction-list tr').show();
            $('input[name="tags"]:checked').removeAttr("checked");
    });
 

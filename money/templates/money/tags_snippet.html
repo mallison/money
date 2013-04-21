@@ -1,9 +1,9 @@
-                     <span class="display {% if not transaction.tags %} hidden {% endif %}">{% for pk, name in transaction.tags %}{{ name }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
-                     <div class="control_container{% if transaction.tags %} hidden {% endif %}">
+                     <span class="display {% if not transaction.tags.count %} hidden {% endif %}">{% for tag in transaction.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+                     <div class="control_container{% if transaction.tags.count %} hidden {% endif %}">
                          <form action="/save/tags/">
                              <select name="tags" class="control" multiple="multiple">
                                  {% for tag in tags %}
-                                 <option{% for pk, name in transaction.tags %}{% ifequal pk tag.pk %} selected="selected"{% endifequal %}{% endfor %} value="{{ tag.pk }}">{{ tag.name }}</option>
+                                 <option{% for this_tag in transaction.tags.all %}{% ifequal this_tag.pk tag.pk %} selected="selected"{% endifequal %}{% endfor %} value="{{ tag.pk }}">{{ tag.name }}</option>
                                  {% endfor %}
                              </select>
                              <p><a class="save" href="save">save</a> | <a class="close" href="close">close</a></p>

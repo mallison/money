@@ -2,9 +2,9 @@
 
 from operator import itemgetter
 
-from django.db.models import Sum
+from django.db.models import Sum, Max
 
-from money.models import Payment, Tag
+from money.models import Payment, Tag, Account, Transaction
 
 
 def totals_for_tags(transactions):
@@ -32,15 +32,43 @@ def in_and_out(transactions):
             **{selector: 0}
               ).exclude(
             # exclude savings as it's not income
-            tags__name="savings"
+            tags__name="transfer"
             ).values_list('amount', flat=True)
         # TODO: no ORM way to do the summing?
         values.append(sum(filtered_transactions) / 100.0)
         yield values[-1]
     yield sum(values)
     yield -sum(
-        transactions.filter(tags__name="savings")
+        transactions.filter(tags__name="transfer")
         .values_list('amount', flat=True)) / 100.0
+
+
+def account_balances(transactions):
+    latest_date = transactions.order_by('-date')[0].date
+    balances = []
+    accounts = Account.objects.annotate(
+        recent=Max('transactions__date')).order_by('-recent')
+    for account in accounts.filter(
+        transactions__id__gt=0).distinct():
+        latest_transaction = account.transactions.order_by('-date', '-memo')[0]
+        balances.append(
+            (account.name,
+             latest_transaction.account_balance(latest_date) / 100.0,
+             latest_transaction,
+             )
+            )
+    balances.append(
+        ("TOTAL", sum([b[1] for b in balances])))
+    loan_payments = Transaction.objects.filter(
+        tags__name="mum's loan",
+        date__lte=latest_date)
+    balances.append(
+        ("Mum's loan",
+         loan_payments.aggregate(sum=Sum('amount'))['sum'] / 100.0,
+         loan_payments[0],
+         )
+        )
+    return balances
 
 
 def remaining_outgoings(transaction):

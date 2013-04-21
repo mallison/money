@@ -1,3 +1,11 @@
+* TODO check march balances correct
+* TODO figure out showing each account's balance!
+* TODO archive off pre-March db (as total balance and account balances will be incorrect before then)
+* TODO commit changes
+* TODO push code to github
+
+* TODO write scrapers for each account?
+
 * TODO remove /save/ urls
 * TODO move js from home.html to js file and delete home.html
 * TODO tag types

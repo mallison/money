@@ -3,16 +3,19 @@ from django.views.generic.dates import (ArchiveIndexView,
                                         YearArchiveView,
                                         MonthArchiveView,
                                         DayArchiveView)
-
 import models
 import views
 
 urlpatterns = patterns(
     '',
 
+    (r'^$', views.home),
+
     (r'^untagged/$', views.untagged),
 
-    url(r'^load/$', views.load, name="money-load"),
+    url(r'^load/$', views.load,
+        name="money-load",
+        ),
 
     (r'^summary/(\d+)/$', views.summary),
 
