@@ -39,7 +39,8 @@ urlpatterns = patterns(
             template_name="money/transaction_archive.html",
             )
      ),
-    url(r'^transactions/(?P<year>\d{4})/(?P<month>\w{3})/$', MonthArchiveView.as_view(
+    url(r'^transactions/(?P<year>\d{4})/(?P<month>\w{3})/$',
+        MonthArchiveView.as_view(
             model=models.Transaction,
             date_field='date',
             template_name="money/transaction_archive.html",
