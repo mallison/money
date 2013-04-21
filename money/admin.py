@@ -19,8 +19,9 @@ class TransactionInline(admin.StackedInline):
 
 admin.site.register(models.Account, inlines=[TransactionInline])
 admin.site.register(models.Transaction,
-                    list_display=('date', 'account', 'memo', 'description', 'amount', 'note'),
+                    list_display=('date', 'account', 'memo',
+                                  'description', 'amount', 'note'),
                     date_hierarchy='date',
-                    filter_horizontal = ('tags',),
+                    filter_horizontal=('tags',),
                     list_filter=('date',))
 admin.site.register(models.Tag)
