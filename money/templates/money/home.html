@@ -13,7 +13,12 @@
   </tr>
   <tr>
     {% for date, total in months %}
-    <td class="amount" style="text-align:right">{{ total.sum|pretty_amount }}</td>
+    <td class="amount" style="text-align:right">
+      {{ total.sum|pretty_amount }}
+      {% if forloop.last %}
+      {{ total.sum|add:outstanding|pretty_amount }}
+      {% endif %}
+    </td>
     {% if forloop.last %}<td class="amount" style="text-align:right">{{ overall_total.sum|pretty_amount }}</td>{% endif %}
     {% endfor %}
   </tr>

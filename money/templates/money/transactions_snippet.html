@@ -1,71 +1,71 @@
 {% load money %}
 <div id="transactions">
-    <table id="transaction-list">
-         <tr>
-             <th>date</th>
-             <th>account</th>
-             <th>memo</th>
-             <th class="amount">amount</th>
-             <th class="amount">account balance</th>
-             <th class="amount">total balance</th>
-             <th>note</th>
-             <th>tags</th>
-         </tr>
-         {% for transaction in transactions %}
-             <tr class="{% spaceless %}{% for tag in transaction.tags.all %}{{ tag.name }} {% empty %}misc{% endfor %}{% endspaceless %} {{ transaction.account.name|slugify }} {% if transaction.tags.all.0.name != "transfer" %}{% if transaction.amount < 0 %}out{% else %}in{% endif %}{% endif %}">
-                 <td>{{ transaction.date|date:"d F Y" }}</td>
-                 <td>{{ transaction.account.name }}</td>
-                 <td>{{ transaction.memo|linebreaks }}</td>
-                 <td class="amount">{{ transaction.amount|pretty_amount }}</td>
-                 <td class="amount">{{ transaction.account_balance|pretty_amount }}</td>
-                 <td class="amount">{{ transaction.total_balance|pretty_amount }}</td>
-                 <td class="note editable">
-                     {% include "money/note_snippet.html" %}
-                 </td>
-                 <td class="editable">
-                     {% include "money/tags_snippet.html" %}
-                 </td>
-             </tr>
-         {% endfor %}
-    </table>
+  <table id="transaction-list">
+    <tr>
+      <th>date</th>
+      <th>account</th>
+      <th>memo</th>
+      <th class="amount">amount</th>
+      <th class="amount">account balance</th>
+      <th class="amount">total balance</th>
+      <th>note</th>
+      <th>tags</th>
+    </tr>
+    {% for transaction in transactions %}
+    <tr class="{% spaceless %}{% for tag in transaction.tags.all %}{{ tag.name }} {% empty %}misc{% endfor %}{% endspaceless %} {{ transaction.account.name|slugify }} {% if transaction.tags.all.0.name != "transfer" %}{% if transaction.amount < 0 %}out{% else %}in{% endif %}{% endif %}">
+      <td>{{ transaction.date|date:"d F Y" }}</td>
+      <td>{{ transaction.account.name }}</td>
+      <td>{{ transaction.memo|linebreaks }}</td>
+      <td class="amount">{{ transaction.amount|pretty_amount }}</td>
+      <td class="amount">{{ transaction.account_balance|pretty_amount }}</td>
+      <td class="amount">{{ transaction.total_balance|pretty_amount }}</td>
+      <td class="note editable">
+        {% include "money/note_snippet.html" %}
+      </td>
+      <td class="editable">
+        {% include "money/tags_snippet.html" %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
 </div>
 <div id="related">
-     <table>
-         <tr><th class="left">in</th><td class="amount">{{ in_and_out.next|floatformat:2 }}</td>
-           <td><input name="tags" value="in" type="radio"></td>
-         </tr>
-         <tr><th class="left">out</th><td class="amount">{{ in_and_out.next|floatformat:2 }}</td>
-           <td><input name="tags" value="out" type="radio"></td>
-         </tr>
-         <tr><th class="left">difference</th><td class="amount">{{ in_and_out.next|floatformat:2 }}</td></tr>
-     </table>
-     <a id="show-all" href="">Show all</a>
-     <table>
-     <tr><th>tag</th><th class="amount">amount</th></tr>
-     {% for tag, total in totals_for_tags %}
-         {% if total %}
-          <tr class="tag{% if tag = "misc" %} misc{% endif %}">
-	    <td>
-	      <label for="{{ tag }}">{{ tag }}</label>
-	    </td>
-	    <td class="amount">
-	      <label>{{ total|floatformat:2 }}<input id="{{ tag }}" name="tags" type="radio" value="{{ tag }}" /></label>
-	    </td>
-	  </tr>
-         {% endif %}
-     {% endfor %}
-     </table>
-     <table>
-     <tr><th>account</th><th class="amount">balance</th></tr>
-     {% for account, balance in balances %}
-          <tr class="{{ account|slugify }}">
-	    <td>
-	      <label for="{{ account }}">{{ account }}</label>
-	    </td>
-	    <td class="amount">
-	      <label>{{ balance|floatformat:2 }}<input id="{{ tag }}" name="tags" type="radio" value="{{ account|slugify }}" /></label>
-	    </td>
-	  </tr>
-     {% endfor %}
-     </table>
+  <a id="show-all" href="">Show all</a>
+
+  <table>
+    <tr><th class="left">in</th><td class="amount">{{ in_and_out.next|pretty_amount }}</td>
+      <td><input name="tags" value="in" type="radio"></td>
+    </tr>
+    <tr><th class="left">out</th><td class="amount">{{ in_and_out.next|pretty_amount }}</td>
+      <td><input name="tags" value="out" type="radio"></td>
+    </tr>
+    {% with total_to_date=in_and_out.next %}
+    <tr><th class="left">difference</th><td class="amount">{{ total_to_date|pretty_amount }}</td></tr>
+    <tr><th class="left">Estimated remaining balance</th><td class="amount">{{ total_outstanding|add:total_to_date|add:savings_target|pretty_amount }}</td></tr>
+  </table>
+
+  <table>
+    <caption>Outstanding transactions</caption>
+    {% for what, amount in outstanding %}
+    <tr><td>{{ what }}</td><td class="amount">{{ amount|pretty_amount }}</td></tr>
+    {% endfor %}
+    <tr><td>TOTAL</td><td class="amount">{{ total_outstanding|pretty_amount }}</td></tr>
+    <tr><td>Estimated difference</td><td class="amount">{{ total_outstanding|add:total_to_date|pretty_amount }}</td></tr>
+    <tr><td>Savings target</td><td class="amount">{{ savings_target|pretty_amount }}</td></tr>
+    <table>
+      {% endwith %}
+      <caption>Spending per category</caption>
+      {% for tag, total in totals_for_tags %}
+      {% if total %}
+      <tr class="tag{% if tag = "misc" %} misc{% endif %}">
+	<td>
+	  <label for="{{ tag }}">{{ tag }}</label>
+	</td>
+	<td class="amount">
+	  <label>{{ total|floatformat:2 }}<input id="{{ tag }}" name="tags" type="radio" value="{{ tag }}" /></label>
+	</td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </table>
 </div>

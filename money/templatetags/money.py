@@ -1,9 +1,11 @@
+from django.conf import settings
 from django import template
 
 register = template.Library()
 
 from ..models import Tag, Account, Transaction
 from ..transaction import totals_for_tags, in_and_out, remaining_outgoings, account_balances
+from .. import views
 
 
 @register.inclusion_tag("money/transactions_snippet.html")
@@ -44,13 +46,23 @@ def transactions(transactions):
     #         r['amount'] = r['amount'] / 100.0
     #         r['tags'] = [(r['tags__pk'], r['tags__name'])]
     #         grouped.append(r)
+    outstanding = []
+    for transaction, details in settings.REGULAR_TRANSACTIONS.items():
+        if not transactions.filter(
+            memo__contains=details['memo']).exists():
+            outstanding.append((transaction, details['amount']))
+    total_outstanding = sum((o[1] for o in outstanding))
     return {
         'transactions': transactions,
         'tags': Tag.objects.order_by('name'),
         'balance_after_remaining_outgoings': balance_after_remaining_outgoings,
         'totals_for_tags': totals_for_tags(transactions),
         'balances': account_balances(transactions),
-        'in_and_out': in_and_out(transactions)}
+        'in_and_out': in_and_out(transactions),
+        'outstanding': outstanding,
+        'total_outstanding': total_outstanding,
+        'savings_target': -settings.SAVINGS_TARGET,
+        }
 
 
 @register.filter

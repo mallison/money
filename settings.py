@@ -90,6 +90,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 STATIC_URL = '/static/'
 
+# TODO move these to the database
 INITIAL_BALANCES = {  # as of 1 March 2013
     'Aldermore ISA': 534000,
     'Barclaycard': -144749,
@@ -104,3 +105,28 @@ INITIAL_BALANCES = {  # as of 1 March 2013
     'Virgin savings': 1916024,
     'West Brom savings': 1020843,
 }
+
+REGULAR_TRANSACTIONS = {
+    'salary': {'memo': 'BEATBULLY',
+               'amount': 300000},
+
+    'gym': {'memo': 'OMNICASH',
+            'amount': -20000},
+
+    'supplements': {'memo': 'MONSTER',
+                    'amount': -4200},
+
+    'orange': {'memo': 'PAYMENT TO ORANGE',
+               'amount': -3500},
+
+    'mums loan': {'memo': '310.00',
+                  'amount': 31000},
+
+    'BT': {'memo': 'MANDATE NO 0001',
+           'amount': -4300},
+
+    'bills': {'memo': 'MANDATE NO 0002',
+              'amount': -16000}
+}
+
+SAVINGS_TARGET = 150000

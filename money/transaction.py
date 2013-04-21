@@ -35,12 +35,12 @@ def in_and_out(transactions):
             tags__name="transfer"
             ).values_list('amount', flat=True)
         # TODO: no ORM way to do the summing?
-        values.append(sum(filtered_transactions) / 100.0)
+        values.append(sum(filtered_transactions))
         yield values[-1]
     yield sum(values)
     yield -sum(
         transactions.filter(tags__name="transfer")
-        .values_list('amount', flat=True)) / 100.0
+        .values_list('amount', flat=True))
 
 
 def account_balances(transactions):

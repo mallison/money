@@ -1,6 +1,7 @@
 import calendar
 import datetime
 
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db.models import Sum
 from django.http import HttpResponseRedirect
@@ -41,6 +42,7 @@ class Calendar(calendar.HTMLCalendar):
 
 
 def home(request):
+    # summarize each month
     latest_transaction = models.Transaction.objects.order_by(
         '-date', '-memo')[0]
     date = models.Transaction.objects.order_by('date')[0].date
@@ -59,6 +61,7 @@ def home(request):
                 )
             )
         date += relativedelta(months=1)
+    # average spending across categories
     tags = totals_for_tags(models.Transaction.objects.all())
     first = models.Transaction.objects.order_by('date')[0].date
     last = models.Transaction.objects.order_by('-date')[0].date
@@ -66,6 +69,17 @@ def home(request):
     approx_months = days / 30.0
     for i in range(len(tags)):
         tags[i] = (tags[i][0], tags[i][1] / approx_months)
+    # where am I at this month?
+    today = datetime.date.today()
+    outstanding = -settings.SAVINGS_TARGET
+    this_month = models.Transaction.objects.filter(
+        date__year=today.year,
+        date__month=today.month)
+    for transaction, details in settings.REGULAR_TRANSACTIONS.items():
+        if not this_month.filter(
+            memo__contains=details['memo']).exists():
+            outstanding += details['amount']
+
     return render(
         request, 'money/home.html',
         {
@@ -75,6 +89,7 @@ def home(request):
             'overall_total': models.Transaction.objects.aggregate(
                 sum=Sum('amount')),
             'tags': tags,
+            'outstanding': outstanding,
             })
 
 
