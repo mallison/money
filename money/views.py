@@ -1,15 +1,12 @@
-import calendar
 import datetime
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.db.models import Sum
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 # TODO: figure out csrf with ajax, csrf_exempt is a temp hack for now
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic.dates import ArchiveIndexView
 from dateutils import relativedelta
 
 # TODO: not sure this is a good style of import (but Guido seems to do
@@ -17,28 +14,6 @@ from dateutils import relativedelta
 import loading
 import models
 from money.transaction import totals_for_tags, in_and_out, account_balances
-
-
-class Calendar(calendar.HTMLCalendar):
-    def __init__(self, transaction_dates, *args, **kwargs):
-        self.transaction_dates = transaction_dates
-        super(Calendar, self).__init__(*args, **kwargs)
-
-    def formatmonth(self, year, month, **kwargs):
-        self.year = year
-        self.month = month
-        return super(Calendar, self).formatmonth(year, month, **kwargs)
-
-    def formatday(self, day, weekday):
-        cell = super(Calendar, self).formatday(day, weekday)
-        try:
-            day = datetime.datetime(self.year, self.month, day)
-        except ValueError:
-            pass
-        else:
-            if day in self.transaction_dates:
-                cell = cell.replace('td', 'td style="background-color:blue"')
-        return cell
 
 
 def home(request):
@@ -183,13 +158,4 @@ def summary(request, year):
          'tags': totals_for_tags(transactions),
          'months': months
          },
-        )
-
-
-def activity(request):
-    dates = models.Transaction.objects.dates('created', 'day')
-    return render(
-        request,
-        'money/activity.html',
-        {'calendar': Calendar(dates).formatyear(2013)}
         )

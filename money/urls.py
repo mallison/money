@@ -54,6 +54,4 @@ urlpatterns = patterns(
             template_name="money/transaction_archive.html",
             )
      ),
-
-    url(r'^activity/$', views.activity, name="money-activity")
 )
