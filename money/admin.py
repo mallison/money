@@ -24,4 +24,3 @@ admin.site.register(models.Transaction,
                     filter_horizontal = ('tags',),
                     list_filter=('date',))
 admin.site.register(models.Tag)
-admin.site.register(models.Payment)
