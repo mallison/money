@@ -8,7 +8,7 @@ from money.models import Tag, Account, Transaction
 
 
 def totals_for_tags(transactions):
-    totals = [(name, total / 100.0) for name, total in (
+    totals = [(name, total) for name, total in (
             Tag.objects
             .filter(transaction__in=transactions)
             .distinct()
@@ -20,7 +20,7 @@ def totals_for_tags(transactions):
     totals.append(('misc', sum(
                 transactions.filter(
                     tags__isnull=True
-                    ).values_list('amount', flat=True)) / 100.0))
+                    ).values_list('amount', flat=True))))
     totals.sort(key=itemgetter(1))
     return totals
 

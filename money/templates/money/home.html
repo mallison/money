@@ -10,6 +10,7 @@
     <th><a href="{% url money-month-archive date.year date|date:"b" %}">{{ date|date:"F" }}</a></th>
     {% endfor %}
     <th>Year to date</th>
+    <th>Estimate for year</th>
   </tr>
   <tr>
     {% for date, total in months %}
@@ -19,7 +20,9 @@
       {{ total.sum|add:outstanding|pretty_amount }}
       {% endif %}
     </td>
-    {% if forloop.last %}<td class="amount" style="text-align:right">{{ overall_total.sum|pretty_amount }}</td>{% endif %}
+    {% if forloop.last %}<td class="amount" style="text-align:right">{{ overall_total.sum|pretty_amount }}</td>
+    <td class="amount">{{ before_this_month.sum|add:total.sum|add:after_this_month|pretty_amount }}</td>
+    {% endif %}
     {% endfor %}
   </tr>
 </table>
@@ -44,7 +47,7 @@
     <tr>
       <td>{{ tag }}</td>
       <td class="amount">
-        {{ amount|floatformat:2 }}
+        {{ amount|pretty_amount }}
       </td>
     </tr>
     {% endfor %}

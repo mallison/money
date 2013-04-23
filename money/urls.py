@@ -54,4 +54,8 @@ urlpatterns = patterns(
             template_name="money/transaction_archive.html",
             )
      ),
+    url(r'forecast/$',
+        views.home,
+        {'template_name': 'money/forecast.html'},
+        name="money-forecast"),
 )

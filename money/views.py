@@ -16,7 +16,7 @@ import models
 from money.transaction import totals_for_tags, in_and_out, account_balances
 
 
-def home(request):
+def home(request, template_name="money/home.html"):
     # summarize each month
     latest_transaction = models.Transaction.objects.order_by(
         '-date', '-memo')[0]
@@ -37,10 +37,12 @@ def home(request):
             )
         date += relativedelta(months=1)
     # average spending across categories
-    tags = totals_for_tags(models.Transaction.objects.all())
     first = models.Transaction.objects.order_by('date')[0].date
     last = models.Transaction.objects.order_by('-date')[0].date
+    last = datetime.date(last.year, last.month, 1)
+    tags = totals_for_tags(models.Transaction.objects.filter(date__lt=last))
     days = (last - first).days
+    # TODO how to calculate whole number of months (relativedelta?)?
     approx_months = days / 30.0
     for i in range(len(tags)):
         tags[i] = (tags[i][0], tags[i][1] / approx_months)
@@ -54,17 +56,49 @@ def home(request):
         if not this_month.filter(
             memo__contains=details['memo']).exists():
             outstanding += details['amount']
-
+    # where am I this year?
+    before_this_month = models.Transaction.objects.filter(
+        date__lt=datetime.date(today.year, today.month, 1))
+    before_this_month_total = before_this_month.aggregate(sum=Sum('amount'))
+    before_this_month = before_this_month.all()
+    for transaction, details in settings.REGULAR_TRANSACTIONS.items():
+        before_this_month = before_this_month.exclude(
+            memo__contains=details['memo'])
+    average_daily_non_regular_spending = (
+        before_this_month.aggregate(sum=Sum('amount'))['sum'] /
+        days)
+    # TODO this isn't quite right for the rest of the year
+    monthly_approximate = sum(
+        r['amount'] for r in settings.REGULAR_TRANSACTIONS.values())
+    daily_approximate = monthly_approximate / 30.0
+    end_of_year = datetime.date(today.year, 12, 31)
+    days = end_of_year - today
+    for i in range(len(tags)):
+        tags[i] = (tags[i][0], tags[i][1], tags[i][1] * days.days / 30.0)
+    after_this_month = days.days * (
+        daily_approximate + average_daily_non_regular_spending)
+    estimated_remaining_regular_spend_for_year = []
+    for transaction, details in settings.REGULAR_TRANSACTIONS.items():
+        estimated_remaining_regular_spend_for_year.append(
+            (transaction, details['amount'], details['amount'] / 30.0 * days.days))
+    # TODO factor known future exprenditure
     return render(
-        request, 'money/home.html',
+        request, template_name,
         {
             'latest_transaction': latest_transaction,
             'balances': account_balances(models.Transaction.objects.all()),
             'months': months,
+            'this_month': months[-1],
             'overall_total': models.Transaction.objects.aggregate(
                 sum=Sum('amount')),
             'tags': tags,
             'outstanding': outstanding,
+            'before_this_month': before_this_month_total,
+            'after_this_month': after_this_month,
+            'regular_monthly_amount': monthly_approximate,
+            'non_regular_monthly_amount': average_daily_non_regular_spending * 30,
+            'savings_target': settings.SAVINGS_TARGET,
+            'estimated_remaining_regular_spend_for_year': estimated_remaining_regular_spend_for_year,
             })
 
 

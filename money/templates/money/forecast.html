@@ -1,0 +1,42 @@
+{% extends "money/base.html" %}
+{% load money %}
+
+{% block content %}
+<h1>Forecast for XXXXX</h1>
+
+<table style="width:auto">
+  <tr>
+    <td>before this month</td><td class="amount">{{ before_this_month.sum|pretty_amount }}</td>
+  </tr>
+  <tr>
+    <td>this month (estimated)</td><td class="amount">{{ this_month.1.sum|add:outstanding|add:savings_target|pretty_amount }}</td>
+  </tr>
+  <tr>
+    <td>rest of year (estimated)</td><td class="amount">{{ after_this_month|pretty_amount }}</td>
+  </tr>
+  <tr>
+    <th>Total</td><td class="amount">{{ before_this_month.sum|add:this_month.1.sum|add:outstanding|add:after_this_month|add:savings_target|pretty_amount }}</td>
+  </tr>
+  <tr>
+    <td>regular monthly amount</td><td class="amount">{{ regular_monthly_amount|pretty_amount }}</td>
+  </tr>
+  {% for transaction, amount, remaining in estimated_remaining_regular_spend_for_year %}
+  <tr>
+    <td>{{ transaction }}</td>
+    <td class="amount">{{ amount|pretty_amount }}</td>
+    <td class="amount">{{ remaining|pretty_amount }}</td>
+  </tr>
+  {% endfor %}
+  <tr>
+    <td>average monthly non-regular spend</td><td class="amount">{{ non_regular_monthly_amount|pretty_amount }}</td>
+  </tr>
+  {% for transaction, amount, remaining in tags %}
+  <tr>
+    <td>{{ transaction }}</td>
+    <td class="amount">{{ amount|pretty_amount }}</td>
+    <td class="amount">{{ remaining|pretty_amount }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

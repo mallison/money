@@ -32,7 +32,7 @@
 	  <label for="{{ tag }}">{{ tag }}</label>
 	</td>
 	<td class="amount">
-	  <label>{{ total|floatformat:2 }}<input id="{{ tag }}" name="tags" type="radio" value="{{ tag }}" /></label>
+	  <label>{{ total|pretty_amount }}<input id="{{ tag }}" name="tags" type="radio" value="{{ tag }}" /></label>
 	</td>
       </tr>
       {% endif %}
