@@ -50,6 +50,21 @@ def santander(data):
     return transactions
 
 
+def santander_credit_card(data):
+    santander = Account.objects.get(name="Santander 1-2-3 credit card")
+    transactions = []
+    lines = data.splitlines()
+    while lines:
+        line = lines.pop(0).strip()
+        date, card_no, memo, amount_in, amount_out = line.split('\t')
+        transactions.append(
+            {'date': clean_date(date),
+             'account': santander,
+             'memo': memo,
+             'amount': clean_amount(amount_in) or -clean_amount(amount_out)})
+    return transactions
+
+
 def virgin(data):
     account = Account.objects.get(name="Virgin savings")
     transactions = []

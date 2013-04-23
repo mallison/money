@@ -83,7 +83,9 @@ def load(request):
     account = request.GET['account']
     if request.method == 'POST':
         account = account.lower()
-        if 'santander' in account:
+        if '1-2-3' in account:
+            parser = loading.santander_credit_card
+        elif 'santander' in account:
             parser = loading.santander
         elif 'virgin' in account:
             parser = loading.virgin
