@@ -129,4 +129,5 @@ REGULAR_TRANSACTIONS = {
               'amount': -16000}
 }
 
-SAVINGS_TARGET = 150000
+SAVINGS_TARGET = 150000 \
+    + 31000  # Mum's loan repayment
