@@ -108,7 +108,7 @@ INITIAL_BALANCES = {  # as of 1 March 2013
 
 REGULAR_TRANSACTIONS = {
     'salary': {'memo': 'BEATBUL',
-               'amount': 300000},
+               'amount': 309400},
 
     'gym': {'memo': 'OMNICASH',
             'amount': -20000},

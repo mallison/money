@@ -7,98 +7,41 @@ from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 # TODO: figure out csrf with ajax, csrf_exempt is a temp hack for now
 from django.views.decorators.csrf import csrf_exempt
-from dateutils import relativedelta
 
-# TODO: not sure this is a good style of import (but Guido seems to do
-# it in appengine examples)
-import loading
-import models
+from . import loading
+from .import models
 from money.transaction import totals_for_tags, in_and_out, account_balances
+from . import utils
 
 
 def home(request, template_name="money/home.html"):
-    # summarize each month
     latest_transaction = models.Transaction.objects.order_by(
         '-date', '-memo')[0]
-    date = models.Transaction.objects.order_by('date')[0].date
-    months = []
-    while True:
-        months_transactions = models.Transaction.objects.filter(
-            date__month=date.month,
-            date__year=date.year)
-        if not months_transactions.count():
-            break
-        months.append(
-            (
-                datetime.date(date.year, date.month, 1),
-                months_transactions
-                .exclude(tags__name='transfer').aggregate(sum=Sum('amount'))
-                )
-            )
-        date += relativedelta(months=1)
-    # average spending across categories
-    first = models.Transaction.objects.order_by('date')[0].date
-    last = models.Transaction.objects.order_by('-date')[0].date
-    last = datetime.date(last.year, last.month, 1)
-    tags = totals_for_tags(models.Transaction.objects.filter(date__lt=last))
-    days = (last - first).days
-    # TODO how to calculate whole number of months (relativedelta?)?
-    approx_months = days / 30.0
-    for i in range(len(tags)):
-        tags[i] = (tags[i][0], tags[i][1] / approx_months)
-    # where am I at this month?
-    today = datetime.date.today()
-    outstanding = -settings.SAVINGS_TARGET
-    this_month = models.Transaction.objects.filter(
-        date__year=today.year,
-        date__month=today.month)
-    for transaction, details in settings.REGULAR_TRANSACTIONS.items():
-        if not this_month.filter(
-            memo__contains=details['memo']).exists():
-            outstanding += details['amount']
-    # where am I this year?
-    before_this_month = models.Transaction.objects.filter(
-        date__lt=datetime.date(today.year, today.month, 1))
-    before_this_month_total = before_this_month.aggregate(sum=Sum('amount'))
-    before_this_month = before_this_month.all()
-    for transaction, details in settings.REGULAR_TRANSACTIONS.items():
-        before_this_month = before_this_month.exclude(
-            memo__contains=details['memo'])
-    average_daily_non_regular_spending = (
-        before_this_month.aggregate(sum=Sum('amount'))['sum'] /
-        days)
-    # TODO this isn't quite right for the rest of the year
-    monthly_approximate = sum(
-        r['amount'] for r in settings.REGULAR_TRANSACTIONS.values())
-    daily_approximate = monthly_approximate / 30.0
-    end_of_year = datetime.date(today.year, 12, 31)
-    days = end_of_year - today
-    for i in range(len(tags)):
-        tags[i] = (tags[i][0], tags[i][1], tags[i][1] * days.days / 30.0)
-    after_this_month = days.days * (
-        daily_approximate + average_daily_non_regular_spending)
-    estimated_remaining_regular_spend_for_year = []
-    for transaction, details in settings.REGULAR_TRANSACTIONS.items():
-        estimated_remaining_regular_spend_for_year.append(
-            (transaction, details['amount'], details['amount'] / 30.0 * days.days))
-    # TODO factor known future exprenditure
+    monthly_totals = utils.get_monthly_totals()
+    whole_months, average_for_tags = utils.average_spending_for_each_tag()
+    outstanding = utils.get_this_months_outstanding_spending()
+    (
+        before_this_month,
+        after_this_month,
+        regular_spending,
+        irregular_spending
+    ) = utils.estimate_this_years_balance()
     return render(
         request, template_name,
         {
             'latest_transaction': latest_transaction,
             'balances': account_balances(models.Transaction.objects.all()),
-            'months': months,
-            'this_month': months[-1],
+            'months': monthly_totals,
+            'this_month': monthly_totals[-1],
             'overall_total': models.Transaction.objects.aggregate(
                 sum=Sum('amount')),
-            'tags': tags,
+            'tags': average_for_tags,
             'outstanding': outstanding,
-            'before_this_month': before_this_month_total,
+            'before_this_month': before_this_month,
             'after_this_month': after_this_month,
-            'regular_monthly_amount': monthly_approximate,
-            'non_regular_monthly_amount': average_daily_non_regular_spending * 30,
+            'regular_spending': regular_spending,
+            'irregular_spending': irregular_spending,
             'savings_target': settings.SAVINGS_TARGET,
-            'estimated_remaining_regular_spend_for_year': estimated_remaining_regular_spend_for_year,
             })
 
 
