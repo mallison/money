@@ -107,7 +107,7 @@ INITIAL_BALANCES = {  # as of 1 March 2013
 }
 
 REGULAR_TRANSACTIONS = {
-    'salary': {'memo': 'BEATBULLY',
+    'salary': {'memo': 'BEATBUL',
                'amount': 300000},
 
     'gym': {'memo': 'OMNICASH',
@@ -119,13 +119,13 @@ REGULAR_TRANSACTIONS = {
     'orange': {'memo': 'PAYMENT TO ORANGE',
                'amount': -3500},
 
-    'mums loan': {'memo': '310.00',
+    'mums loan': {'memo': 'M ALLISON',
                   'amount': 31000},
 
-    'BT': {'memo': 'MANDATE NO 0001',
+    'BT': {'memo': 'BT , MANDATE NO 0001',
            'amount': -4300},
 
-    'bills': {'memo': 'MANDATE NO 0002',
+    'bills': {'memo': 'KEEP , MANDATE NO 0002',
               'amount': -16000}
 }
 
