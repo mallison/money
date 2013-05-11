@@ -4,7 +4,15 @@
 {% block content %}
 
 <h1>Forecast for {{ latest_transaction.date.year }}</h1>
-
+<p>TODO
+<ul>
+  <li>show totals for regular/irregular spend per month</li>
+  <li>exclude regular spending from bottom table</li>
+  <li>exclude loan repayments</li>
+  <li>Turn bottom two tables in to a form so you can play with the numbers and
+    recalculate the year's estimated total!</li>
+</ul>
+   
 <table style="width:auto">
   <tr>
     <td>To end of last month</td><td class="amount">{{ before_this_month|pretty_amount }}</td>
