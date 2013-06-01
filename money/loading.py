@@ -7,7 +7,7 @@ class BlankLine(Exception):
     pass
 
 
-def barlcays(data):
+def barclays(data):
     barclays = Account.objects.get(name="Barclays current account")
     transactions = []
     lines = data.splitlines()

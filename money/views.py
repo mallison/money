@@ -70,6 +70,8 @@ def load(request):
             parser = loading.westbrom
         elif 'halifax' in account:
             parser = loading.halifax
+        elif 'barclays' in account:
+            parser = loading.barclays
         # TODO Barclaycard
         pasted_data = request.POST.get('pasted_data')
         try:
