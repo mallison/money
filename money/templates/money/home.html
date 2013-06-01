@@ -21,7 +21,7 @@
       {% endif %}
     </td>
     {% if forloop.last %}<td class="amount" style="text-align:right">{{ overall_total.sum|pretty_amount }}</td>
-    <td class="amount">{{ before_this_month.sum|add:total.sum|add:after_this_month|pretty_amount }}</td>
+    <td class="amount">{{ before_this_month|add:after_this_month|pretty_amount }}</td>
     {% endif %}
     {% endfor %}
   </tr>
