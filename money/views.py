@@ -53,6 +53,21 @@ def home(request, template_name="money/home.html"):
             })
 
 
+class SincePayDayArchiveView(ArchiveIndexView):
+    def get_queryset(self):
+        queryset = super(SincePayDayArchiveView, self).get_queryset()
+        self.last_pay_day = queryset.filter(tags__name="salary").order_by('-date')[0]
+        return queryset.filter(date__gte=self.last_pay_day.date)
+
+    def get_context_data(self, **kwargs):
+        context = super(SincePayDayArchiveView, self).get_context_data(**kwargs)
+        context['title'] = 'Since pay-day'
+        month = context['up_text'] = self.last_pay_day.date.strftime('%b').lower()
+        context['up'] = reverse('money-month-archive',
+                                args=(self.last_pay_day.date.year, month))
+        return context
+
+
 def untagged(request):
     transactions = models.Transaction.objects.filter(tags__isnull=True)
     return render_to_response(
