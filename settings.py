@@ -60,7 +60,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'personal_finance.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -110,24 +110,18 @@ REGULAR_TRANSACTIONS = {
     'salary': {'memo': 'BEATBUL',
                'amount': 309400},
 
-    'gym': {'memo': 'OMNICASH',
-            'amount': -20000},
-
-    'supplements': {'memo': 'MONSTER',
-                    'amount': -4200},
-
-    'orange': {'memo': 'PAYMENT TO ORANGE',
-               'amount': -3500},
-
     'mums loan': {'memo': 'M ALLISON',
                   'amount': 31000},
 
     'BT': {'memo': 'BT , MANDATE NO 0001',
            'amount': -4300},
 
-    'bills': {'memo': 'KEEP , MANDATE NO 0002',
-              'amount': -16000}
 }
 
-SAVINGS_TARGET = 150000 \
-    + 31000  # Mum's loan repayment
+# Ed reckons 1/3 housing, 1/3 pension and 1/3 living is a good way to
+# go. So I should be saving 2/3s of my income at the moment as I've no
+# (few) housing costs and not (yet) saving into a pension.  Can I live
+# on a grand a month which has to pay for all holidays and weekends
+# away and toys etc?
+SAVINGS_TARGET = 0
+

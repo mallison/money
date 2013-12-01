@@ -26,6 +26,13 @@ def home(request, template_name="money/home.html"):
         regular_spending,
         irregular_spending
     ) = utils.estimate_this_years_balance()
+    # balance of 'living' account
+    # TODO should only be for whole months so far I think
+    total_spend = models.Transaction.objects.filter(
+        amount__lt=0).exclude(tags__name="transfer").aggregate(
+        sum=Sum('amount'))
+    desired_spend = 100000 * whole_months
+    living_balance = desired_spend + total_spend['sum']
     return render(
         request, template_name,
         {
@@ -42,6 +49,7 @@ def home(request, template_name="money/home.html"):
             'regular_spending': regular_spending,
             'irregular_spending': irregular_spending,
             'savings_target': settings.SAVINGS_TARGET,
+            'living_balance': living_balance,
             })
 
 

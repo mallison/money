@@ -1,0 +1,179 @@
+
+
+
+
+
+
+ 
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"  lang="en-GB">
+
+<head>
+
+<title>Santander Online Banking </title>
+
+<meta http-equiv = "Content-Type" content = "text/html; charset=UTF-8" />
+<meta http-equiv = "Pragma" content = "no-cache" />
+<meta http-equiv = "Expires" content = "Tue, 01 Jan 1980 12:00:00 GMT" />
+<meta http-equiv = "Cache-Control" content = "no-cache" />
+
+<link rel="shortcut icon" href="/Estatico/ALP_EBAN_Templates/Images/favicon.ico" />
+
+<link rel="stylesheet" type="text/css" media="screen, print" href="/Estatico/ALP_EBAN_Templates/Styles/common.css" />
+
+
+
+
+
+<link rel="stylesheet" type="text/css" media="print" href="/Estatico/ALP_EBAN_Templates/Styles/print.css" /> 
+<link rel="stylesheet" type="text/css" media="aural" href="/Estatico/ALP_EBAN_Templates/Styles/aural.css" /> 
+
+<script type="text/javascript" src="/Estatico/ALP_EBAN_Templates/Scripts/jquery-1.6.2.min.js"></script>
+<script type="text/javascript" src="/Estatico/ALP_EBAN_Templates/Scripts/calendar2.js"></script>
+<script type="text/javascript" src="/Estatico/ALP_EBAN_Templates/Scripts/behaviour2.js"></script>
+
+<script type="text/javascript" src="/Estatico/ALP_LOGSUK_Logon/Scripts/pm_fp.js"></script>
+
+	
+		<script type="text/javascript">  
+			(function() {
+			  var bt="text/java",z=document,fh=z.getElementsByTagName('head')[0],k='script',j= (window.location.protocol == "https:" ? "https:/" : "http:/");
+			  var y=z.createElement(k);y.async=true;y.type=bt+k;y.src=[j,"press.retail.santander.co.uk","96366421","3r2.js"].join("/");
+			  fh.appendChild(y);
+			})();
+		</script>
+
+	
+
+</head>
+<body>
+
+
+<div id="global">
+	<a href="#bodycontent" class="skipToContent">Skip to content</a>
+	<div id="header"> 
+		<div id="headinfo">
+			<div id="logo"><img src="/Estatico/ALP_EBAN_Templates/Images/logo_santander.gif" alt="Santander" width="183" height="53" /></div>
+			<p class="subtitle">Online Banking</p>
+		</div>
+	</div>
+	
+	<div id="informationBar">
+			<div id="submenu">
+			<ul>
+				<li class="first"><a href="/Estatico/ALP_LOGSUK_Logon/Html/migracionv1_contactUs.html" target="contactUs" class="helpicon">Contact us</a></li>
+				
+					
+						<li class="last"><a href="/Estatico/ALP_LOGSUK_Logon/Html/migracionv1_FAQ_Help.html" target="santanderHelp" class="helpicon">Help</a></li>
+					
+					
+				
+				
+				
+			</ul>
+		</div>
+	</div>
+
+	<div id="bodycontent">
+		
+		
+		
+		
+		<div id="content">
+			<h1 class="lock">Log on</h1>
+			<div class="container">
+				<h2>We are unfamiliar with the computer you are using</h2>
+				
+					
+								
+				<div class="contents">
+				<ul class="plainText">
+    				<li>Please answer the question below and click 'Continue'.</li>
+    				<li>If you think you may have entered  your ID incorrectly, click the 'Back' button and re-enter your ID.</li>
+				</ul>
+				<form method="post" action="ChannelDriver.ssobto?dse_contextRoot=true" id="formCustomerID" >
+					<fieldset>
+						<div class="form">
+							<div class="form-item">
+								<span class="labeltext"><strong>Question:</strong></span>
+								<span class="data">
+									Place of Birth
+								</span>
+							</div>	
+
+							<div class="form-item">
+								<label for="cbQuestionChallenge.responseUser" class="fieldhelp"><span class="labeltext"><strong>Answer:  <img src="/Estatico/ALP_EBAN_Templates/Images/ico_help.gif" alt="" title="When you first registered for online banking, we asked you to provide answers to one or more questions. If we do not recognise the device you are logging on from, we will prompt you to answer one of these questions. If you are still unable to remember the answer to the additional question asked, simply contact our online banking helpdesk on 0845 600 4388 (lines are open 7am-11pm Mon-Sat and 9am-9pm Sun)." /></strong></span>
+									<span class="data">
+										
+
+
+										<input type="text" name="cbQuestionChallenge.responseUser" id="cbQuestionChallenge.responseUser" class="mandatory firstfocus" autocomplete="off" maxlength="35" tabindex="1" />
+									</span>
+								</label>								
+							</div>
+							
+
+							<div class="form-item">
+								<span class="labeltext publicComputer">Are you using a public computer (e.g. internet café)?</span>
+								<span class="data radioSelection">
+									<span><input class="radioInput" type="radio" name="control.bind" id="public_yes" value="S" tabindex="2" /><label for="public_yes" >Yes</label></span>
+									<span><input class="radioInput" type="radio" name="control.bind" id="public_no" value="N" checked="checked" tabindex="3" /><label for="public_no">No</label></span>
+								</span>				
+							</div>
+						</div>
+					</fieldset>
+					<div class="buttonholder">
+						<span class="button"><input type="submit" value="&lt; Back" name="buttons.0" tabindex="5"/></span>
+						<span class="button"><input type="submit"  value="Continue" class="defaultAction" name="buttons.1" tabindex="4"/></span>
+					</div>
+					<input type="hidden" name="dse_applicationName" value="ALP_LOGSUK_Logon" />
+<input type="hidden" name="dse_sessionId" value="TEB_pjZ2poSwsP8c0ucjgO8" />
+<input type="hidden" name="dse_operationName" value="CHALLENGE" />
+<input type="hidden" name="dse_threadId" value="defaultExecutionThreadIdentifier" />
+<input type="hidden" name="dse_pageId" value="0" />
+<input type="hidden" name="dse_processorState" value="ChallengeQuestion" />
+<input type="hidden" name="dse_processorId" value="AC13A558EC91CE30E33AC39D" />
+<input type="hidden" name="dse_cmd" value="continue" />
+					<input type="hidden" name="dse_errorPage" value=""/>
+					<input type="hidden" name="dse_nextEventName" value="submit"/>						
+				</form>
+				<p><a href="./BtoChannelDriver.ssobto?dse_sessionId=TEB_pjZ2poSwsP8c0ucjgO8&amp;dse_operationName=CHALLENGE&amp;dse_applicationName=ALP_LOGSUK_Logon&amp;dse_threadId=defaultExecutionThreadIdentifier&amp;dse_pageId=0&amp;dse_processorState=ChallengeQuestion&amp;dse_processorId=AC13A558EC91CE30E33AC39D&amp;dse_cmd=continue&dse_nextEventName=forgot" target="forgotten">Forgotten the answer to your additional security question?</a></p>
+					
+				</div>
+			</div>
+		</div>
+	
+		<div id="foot">		
+			<ul>
+				<li><a title="This link opens in a new window" href="http://www.santander.co.uk/csgs/Satellite?appID=abbey.internet.Abbeycom&canal=CABBEYCOM&cid=1210606981284&empr=Abbeycom&leng=en_GB&pagename=Abbeycom%2FPage%2FWC_ACOM_TemplateA2" target="santanderHelp">Online Banking Guarantee</a></li>
+				<li><a title="This link opens in a new window" href="/Estatico/ALP_EBAN_Templates/Html/Santander%20v1-%20site_help_accesibility.html" target="santanderHelp">Site Help &amp; Accessibility</a></li>
+				<li><a title="This link opens in a new window" href="/Estatico/ALP_EBAN_Templates/Html/Santander%20v1-%20privacy_statement.html" target="santanderHelp">Security &amp; Privacy</a></li>
+				
+					<li><a title="This link opens in a new window" href="/Estatico/ALP_EBAN_Templates/Html/Santander%20v1-%20terms_conditions.html" target="santanderHelp">Terms &amp; Conditions</a></li>
+				
+				<li class="last"><a title="This link opens in a new window" href="/Estatico/ALP_EBAN_Templates/Html/Santander%20v1-%20legal.html" target="santanderHelp">Legal</a></li>
+			</ul>
+		</div>
+	</div>
+
+	
+
+</div>
+</body>
+</html>

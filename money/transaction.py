@@ -34,6 +34,11 @@ def in_and_out(transactions):
             # exclude savings as it's not income
             tags__name="transfer"
             ).values_list('amount', flat=True)
+        if 'gte' in selector:
+            # only interested in real income (just salary at the
+            # moment -- ignore interest)
+            filtered_transactions = filtered_transactions.filter(
+                tags__name='salary')
         # TODO: no ORM way to do the summing?
         values.append(sum(filtered_transactions))
         yield values[-1]

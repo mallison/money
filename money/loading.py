@@ -55,7 +55,7 @@ def santander_credit_card(data):
     transactions = []
     lines = data.splitlines()
     while lines:
-        line = lines.pop(0).strip()
+        line = lines.pop(0)  # .strip()
         date, card_no, memo, amount_in, amount_out = line.split('\t')
         transactions.append(
             {'date': clean_date(date),
