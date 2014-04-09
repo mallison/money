@@ -29,11 +29,11 @@ def home(request, template_name="money/home.html"):
         irregular_spending
     ) = utils.estimate_this_years_balance()
     # savings since started paying into pension
-    today = datetime.date.today()
-    end_of_last_month = today - datetime.timedelta(days=today.day)
+    last_pay_day = models.Transaction.objects.filter(
+        tags__name="salary").order_by('-date')[0]
     difference = models.Transaction.objects.filter(
         date__gte="2013-12-01",
-        date__lte=end_of_last_month,
+        date__lt=last_pay_day.date,
     ).exclude(
         tags__name__in=["transfer", "interest"]
     ).aggregate(sum=Sum('amount'))['sum']
