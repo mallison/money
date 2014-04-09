@@ -34,7 +34,7 @@
       <td class="amount">{{ living_balance|pretty_amount }}</td>
     </tr>
     {% for account, balance, latest_transaction in balances %}
-    {% if account != "TOTAL" %}
+    {% if account != "TOTAL" and balance != 0 %}
     <tr>
       <td><a href="{% url money-load %}?account={{ account|urlencode }}">{{ account }}</a></td>
       <td class="amount">
