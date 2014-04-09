@@ -50,6 +50,17 @@ class Transaction(models.Model):
         # TODO: can do this with aggregations now
         return sum(previous) + INITIAL_BALANCE
 
+    def since_pay_day_balance(self):
+        last_pay_day = self.__class__.objects.filter(
+            tags__name='salary',
+            date__lte=self.date
+        ).order_by('-date')[0]
+        previous = self.__class__.objects.exclude(tags__name="transfer").filter(
+            Q(date__lt=self.date) | Q(date=self.date) & Q(memo__lte=self.memo)
+        ).filter(date__gte=last_pay_day.date)
+        return previous.aggregate(
+            sum=models.Sum('amount'))['sum'] - last_pay_day.amount
+        
     def _format_amount(self, amount):
         return '%.2f' % (amount / 100.00)
 

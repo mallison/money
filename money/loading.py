@@ -127,9 +127,13 @@ def clean_date(date):
 
 
 def clean_amount(amount):
-    amount = amount.strip()
-    if amount:
-        amount = int(amount.replace(u'\u00a3', '').
-                     replace(',', '').
-                     replace('.', ''))
-    return amount
+    cleaned = amount.strip()
+    if cleaned:
+        cleaned = int(cleaned.replace(u'\u00a3', '').
+                      replace(',', '').
+                      replace('.', '').
+                      replace('CR', '')
+        )
+        if 'CR' in amount:
+            cleaned = -cleaned
+    return cleaned

@@ -56,6 +56,16 @@ urlpatterns = patterns(
             ),
         name="money-month-archive"
      ),
+
+    url(r'^transactions/payday/(?P<year>\d{4})/(?P<month>\w{3})/$',
+        views.SincePayDayArchiveView.as_view(
+            model=models.Transaction,
+            date_field='date',
+            template_name="money/transaction_archive.html",
+            ),
+        name="money-month-archive"
+     ),
+
     (r'^transactions/(?P<year>\d{4})/(?P<month>\w{3})/(?P<day>\d{2})/$',
      DayArchiveView.as_view(
             model=models.Transaction,

@@ -104,24 +104,16 @@ INITIAL_BALANCES = {  # as of 1 March 2013
     'Santander current account': 0,
     'Virgin savings': 1916024,
     'West Brom savings': 1020843,
+    'Provisional': 0,
 }
 
 REGULAR_TRANSACTIONS = {
-    'salary': {'memo': 'BEATBUL',
-               'amount': 309400},
-
-    'mums loan': {'memo': 'M ALLISON',
-                  'amount': 31000},
+    'salary': {'memo': 'SALARY',
+               'amount': 155219},
 
     'BT': {'memo': 'BT , MANDATE NO 0001',
            'amount': -4300},
 
 }
 
-# Ed reckons 1/3 housing, 1/3 pension and 1/3 living is a good way to
-# go. So I should be saving 2/3s of my income at the moment as I've no
-# (few) housing costs and not (yet) saving into a pension.  Can I live
-# on a grand a month which has to pay for all holidays and weekends
-# away and toys etc?
 SAVINGS_TARGET = 0
-

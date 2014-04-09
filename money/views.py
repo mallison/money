@@ -1,12 +1,14 @@
 import datetime
 
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db.models import Sum
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 # TODO: figure out csrf with ajax, csrf_exempt is a temp hack for now
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.dates import ArchiveIndexView
 
 from . import loading
 from .import models
@@ -53,18 +55,51 @@ def home(request, template_name="money/home.html"):
             })
 
 
+# class SincePayDayArchiveView(ArchiveIndexView):
+#     def get_queryset(self):
+#         queryset = super(SincePayDayArchiveView, self).get_queryset()
+#         self.last_pay_day = queryset.filter(tags__name="salary").order_by('-date')[0]
+#         return queryset.filter(date__gte=self.last_pay_day.date)
+
+#     def get_context_data(self, **kwargs):
+#         context = super(SincePayDayArchiveView, self).get_context_data(**kwargs)
+#         context['title'] = 'Since pay-day'
+#         month = context['up_text'] = self.last_pay_day.date.strftime('%b').lower()
+#         context['up'] = reverse('money-month-archive',
+#                                 args=(self.last_pay_day.date.year, month))
+#         return context
+
+
 class SincePayDayArchiveView(ArchiveIndexView):
+    allow_future = True
+
     def get_queryset(self):
         queryset = super(SincePayDayArchiveView, self).get_queryset()
-        self.last_pay_day = queryset.filter(tags__name="salary").order_by('-date')[0]
-        return queryset.filter(date__gte=self.last_pay_day.date)
+        month_number = [datetime.date(2013, i, 1).strftime('%b').lower() for i in range(1, 13)].index(self.kwargs['month']) + 1
+        self.this_pay_day = queryset.filter(
+            tags__name="salary",
+            date__year=self.kwargs['year'],
+            date__month=month_number,
+        ).order_by('-date')[0]
+        try:
+            self.next_pay_day = queryset.filter(
+                tags__name="salary",
+                date__gt=self.this_pay_day.date).order_by('-date')[0]
+        except IndexError:
+            self.next_pay_day = None
+        queryset = queryset.filter(
+            date__gte=self.this_pay_day.date,
+        )
+        if self.next_pay_day:
+            queryset = queryset.filter(date__lt=self.next_pay_day.date)
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super(SincePayDayArchiveView, self).get_context_data(**kwargs)
         context['title'] = 'Since pay-day'
-        month = context['up_text'] = self.last_pay_day.date.strftime('%b').lower()
+        month = context['up_text'] = self.this_pay_day.date.strftime('%b').lower()
         context['up'] = reverse('money-month-archive',
-                                args=(self.last_pay_day.date.year, month))
+                                args=(self.this_pay_day.date.year, month))
         return context
 
 

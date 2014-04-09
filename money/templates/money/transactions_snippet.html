@@ -48,6 +48,7 @@
       <th class="amount">Amount</th>
       <th class="amount">Account balance</th>
       <th class="amount">Total balance</th>
+      <th class="amount">Since pay day</th>
       <th>Note</th>
       <th>Tags</th>
     </tr>
@@ -59,6 +60,7 @@
       <td class="amount">{{ transaction.amount|pretty_amount }}</td>
       <td class="amount">{{ transaction.account_balance|pretty_amount }}</td>
       <td class="amount">{{ transaction.total_balance|pretty_amount }}</td>
+      <td class="amount">{{ transaction.since_pay_day_balance|pretty_amount }}</td>
       <td class="note editable">
         {% include "money/note_snippet.html" %}
       </td>

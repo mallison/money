@@ -109,6 +109,7 @@ def get_average_monthly_non_regular_spend():
         before_this_month = before_this_month.exclude(
             memo__contains=details['memo'])
     months = whole_months_between(start_of_year, start_of_month)
+    return 0
     return (
         before_this_month.aggregate(sum=Sum('amount'))['sum'] /
         months * 1.0

@@ -61,4 +61,7 @@ def transactions(transactions):
 
 @register.filter
 def pretty_amount(amount):
-    return '%0.2f' % (amount / 100.0)
+    try:
+        return '%0.2f' % (amount / 100.0)
+    except TypeError:
+        return '???'

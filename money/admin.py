@@ -23,5 +23,5 @@ admin.site.register(models.Transaction,
                                   'description', 'amount', 'note'),
                     date_hierarchy='date',
                     filter_horizontal=('tags',),
-                    list_filter=('date',))
+                    list_filter=('date', 'account'))
 admin.site.register(models.Tag)

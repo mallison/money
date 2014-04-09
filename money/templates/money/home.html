@@ -46,15 +46,5 @@
     {% endfor %}
   </table>
 
-  <table style="width:auto;margin:auto;font-size:1.2em;float:right">
-    {% for tag, amount in tags %}
-    <tr>
-      <td>{{ tag }}</td>
-      <td class="amount">
-        {{ amount|pretty_amount }}
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
 </div>
 {% endblock %}
