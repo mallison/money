@@ -30,7 +30,7 @@
 <div style="margin:auto;width:50%">
   <table style="width:auto;margin:auto;font-size:1.5em;float:left">
     <tr>
-      <td>'Savings'</td>
+      <td>Savings <small>(since paying into pension)</small></td>
       <td class="amount">{{ living_balance|pretty_amount }}</td>
     </tr>
     {% for account, balance, latest_transaction in balances %}
