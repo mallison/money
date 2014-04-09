@@ -64,13 +64,4 @@ def account_balances(transactions):
             )
     balances.append(
         ("TOTAL", sum([b[1] for b in balances])))
-    loan_payments = Transaction.objects.filter(
-        tags__name="mum's loan",
-        date__lte=latest_date)
-    balances.append(
-        ("Mum's loan",
-         loan_payments.aggregate(sum=Sum('amount'))['sum'] / 100.0,
-         loan_payments[0],
-         )
-        )
     return balances
