@@ -14,14 +14,6 @@
     <tr><th class="left">Estimated remaining balance</th><td class="amount">{{ total_outstanding|add:total_to_date|add:savings_target|pretty_amount }}</td></tr>
   </table>
 
-  <table>
-    <caption>Outstanding transactions</caption>
-    {% for what, amount in outstanding %}
-    <tr><td>{{ what }}</td><td class="amount">{{ amount|pretty_amount }}</td></tr>
-    {% endfor %}
-    <tr><td>TOTAL</td><td class="amount">{{ total_outstanding|pretty_amount }}</td></tr>
-    <tr><td>Estimated difference</td><td class="amount">{{ total_outstanding|add:total_to_date|pretty_amount }}</td></tr>
-    <tr><td>Savings target</td><td class="amount">{{ savings_target|pretty_amount }}</td></tr>
     <table>
       {% endwith %}
       <caption>Spending per category</caption>
