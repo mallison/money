@@ -104,10 +104,6 @@ INITIAL_BALANCES = {  # as of 1 March 2013
 REGULAR_TRANSACTIONS = {
     'salary': {'memo': 'SALARY',
                'amount': 155219},
-
-    'BT': {'memo': 'BT , MANDATE NO 0001',
-           'amount': -4300},
-
 }
 
 SAVINGS_TARGET = 0
