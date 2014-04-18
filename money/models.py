@@ -59,7 +59,7 @@ class Transaction(models.Model):
             Q(date__lt=self.date) | Q(date=self.date) & Q(memo__lte=self.memo)
         ).filter(date__gte=last_pay_day.date)
         return previous.aggregate(
-            sum=models.Sum('amount'))['sum'] - last_pay_day.amount
+            sum=models.Sum('amount'))['sum']
         
     def _format_amount(self, amount):
         return '%.2f' % (amount / 100.00)
