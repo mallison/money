@@ -8,7 +8,6 @@ class BlankLine(Exception):
 
 
 def barclays(data):
-    barclays = Account.objects.get(name="Barclays current account")
     transactions = []
     lines = data.splitlines()
     while lines:
@@ -16,7 +15,6 @@ def barclays(data):
         fields = [f.strip() for f in line.split('\t')]
         transactions.append(
             {'date': clean_date(fields[0]),
-             'account': barclays,
              'memo': fields[1],
              'amount': clean_amount(fields[2]) or clean_amount(fields[3])})
         try:
@@ -36,7 +34,6 @@ def add_detail(transactions, lines):
 
 
 def santander(data):
-    santander = Account.objects.get(name="Santander current account")
     transactions = []
     lines = data.splitlines()
     while lines:
@@ -44,14 +41,12 @@ def santander(data):
         date, memo, amount_in, amount_out, balance = line.split('\t')
         transactions.append(
             {'date': clean_date(date),
-             'account': santander,
              'memo': memo,
              'amount': clean_amount(amount_in) or -clean_amount(amount_out)})
     return transactions
 
 
 def santander_credit_card(data):
-    santander = Account.objects.get(name="Santander 1-2-3 credit card")
     transactions = []
     lines = data.splitlines()
     while lines:
@@ -59,14 +54,12 @@ def santander_credit_card(data):
         date, card_no, memo, amount_in, amount_out = line.split('\t')
         transactions.append(
             {'date': clean_date(date),
-             'account': santander,
              'memo': memo,
              'amount': clean_amount(amount_in) or -clean_amount(amount_out)})
     return transactions
 
 
 def virgin(data):
-    account = Account.objects.get(name="Virgin savings")
     transactions = []
     lines = data.splitlines()
     while lines:
@@ -75,14 +68,12 @@ def virgin(data):
             amount_out, amount_in, balance = line.split('\t')
         transactions.append(
             {'date': clean_date(date),
-             'account': account,
              'memo': memo,
              'amount': clean_amount(amount_in) or -clean_amount(amount_out)})
     return transactions
 
 
 def westbrom(data):
-    account = Account.objects.get(name="West Brom savings")
     transactions = []
     lines = data.splitlines()
     while lines:
@@ -91,14 +82,12 @@ def westbrom(data):
             amount_in, amount_out, balance = line.split('\t')
         transactions.append(
             {'date': clean_date(date),
-             'account': account,
              'memo': memo,
              'amount': clean_amount(amount_in) or -clean_amount(amount_out)})
     return transactions
 
 
 def halifax(data):
-    account = Account.objects.get(name="Halifax Clarity")
     transactions = []
     lines = data.splitlines()
     while lines:
@@ -112,7 +101,6 @@ def halifax(data):
             transactions.append(
                 {
                     'date': clean_date(date),
-                    'account': account,
                     'memo': memo,
                     'amount': -clean_amount(amount)
                     })

@@ -119,18 +119,18 @@ def untagged(request):
 def load(request):
     account = request.GET['account']
     if request.method == 'POST':
-        account = account.lower()
-        if '1-2-3' in account:
+        account_key = account.lower()
+        if '1-2-3' in account_key:
             parser = loading.santander_credit_card
-        elif 'santander' in account:
+        elif 'santander' in account_key:
             parser = loading.santander
-        elif 'virgin' in account:
+        elif 'virgin' in account_key:
             parser = loading.virgin
-        elif 'west brom' in account:
+        elif 'west brom' in account_key:
             parser = loading.westbrom
-        elif 'halifax' in account:
+        elif 'halifax' in account_key:
             parser = loading.halifax
-        elif 'barclays' in account:
+        elif 'barclays' in account_key:
             parser = loading.barclays
         # TODO Barclaycard
         pasted_data = request.POST.get('pasted_data')
@@ -141,6 +141,7 @@ def load(request):
             errors = ['Oops']
         else:
             for transaction in transactions:
+                transaction['account'] = models.Account.objects.get(name=account)
                 models.Transaction.objects.create(**transaction)
         return HttpResponseRedirect('/')
     else:
