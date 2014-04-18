@@ -104,7 +104,7 @@ INITIAL_BALANCES = {  # as of 1 March 2013
     'Santander current account': 0,
     'Virgin savings': 1916024,
     'West Brom savings': 1020843,
-    'Provisional': 0,
+    'Pending': 0,
 }
 
 REGULAR_TRANSACTIONS = {
