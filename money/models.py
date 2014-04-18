@@ -55,7 +55,7 @@ class Transaction(models.Model):
             tags__name='salary',
             date__lte=self.date
         ).order_by('-date')[0]
-        previous = self.__class__.objects.exclude(tags__name="transfer").filter(
+        previous = self.__class__.objects.exclude(tags__name__in=["transfer", "interest"]).filter(
             Q(date__lt=self.date) | Q(date=self.date) & Q(memo__lte=self.memo)
         ).filter(date__gte=last_pay_day.date)
         return previous.aggregate(
