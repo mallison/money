@@ -38,7 +38,7 @@ class Transaction(models.Model):
         if max_date:
             previous = previous.filter(date__lte=max_date)
         # TODO: can do this with aggregations now
-        return sum(previous) + settings.INITIAL_BALANCES[self.account.name]
+        return sum(previous) + settings.INITIAL_BALANCES.get(self.account.name, 0)
 
     def total_balance(self):
         previous = self.__class__.objects.filter(

@@ -96,15 +96,9 @@ INITIAL_BALANCES = {  # as of 1 March 2013
     'Barclaycard': -144749,
     'Barclays current account': 173886,
     'Barclays current account': 1279591,
-    'Cheshire ISA': 0,
-    'Halifax Clarity': 0,
-    'Santander 1-2-3 credit card': 0,
     'Santander ISA 2012-2013': 564000,
-    'Santander ISA 2013-2014': 0,
-    'Santander current account': 0,
     'Virgin savings': 1916024,
     'West Brom savings': 1020843,
-    'Pending': 0,
 }
 
 REGULAR_TRANSACTIONS = {
