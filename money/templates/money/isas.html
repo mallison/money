@@ -1,0 +1,37 @@
+{% extends "money/base.html" %}
+{% load money %}
+
+{% block content %}
+<table>
+    <tr>
+	<th>Account</th>
+	<th>Date</th>
+	<th>Amount</th>
+	<th>Balance</th>
+	<th>Total balance</th>
+    </tr>
+    {% for t, s in transactions %}
+    <tr>
+        <td>{{ t.account.name }}</td>
+        <td>{{ t.date }}</td>
+        <td>{{ t.amount|pretty_amount }}</td>
+        <td>{{ t.account_balance|pretty_amount }}</td>
+        <td>{{ s|pretty_amount }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<table>
+    <tr>
+	<th>Account</th>
+	<th>Balance</th>
+    </tr>
+    {% for a, b in balances %}
+    <tr>
+        <td>{{ a }}</td>
+        <td>{{ b|pretty_amount }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

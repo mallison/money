@@ -14,6 +14,11 @@ class Account(models.Model):
         return self.name
 
 
+class TransactionManager(models.Manager):
+    def get_query_set(self):
+        return super(TransactionManager, self).get_query_set().exclude(tags__name='tax')
+
+
 class Transaction(models.Model):
     account = models.ForeignKey(
         Account, null=True, related_name="transactions")
@@ -24,6 +29,8 @@ class Transaction(models.Model):
     note = models.TextField(blank=True)
     tags = models.ManyToManyField('Tag', blank=True)
     created = models.DateField(auto_now_add=True)
+
+    # objects = TransactionManager()
 
     class Meta:
         ordering = ('-date', '-memo')
@@ -60,6 +67,14 @@ class Transaction(models.Model):
         ).filter(date__gte=last_pay_day.date)
         return previous.aggregate(
             sum=models.Sum('amount'))['sum']
+
+    def spent_since_pay_day(self):
+        last_pay_day = self.__class__.objects.filter(
+            tags__name='salary',
+            date__lte=self.date
+        ).order_by('-date')[0]
+        balance = self.since_pay_day_balance()
+        return last_pay_day.amount - balance
         
     def _format_amount(self, amount):
         return '%.2f' % (amount / 100.00)

@@ -23,10 +23,12 @@ def get_monthly_totals():
             (
                 datetime.date(date.year, date.month, 1),
                 months_transactions.exclude(
-                    tags__name='transfer').aggregate(sum=Sum('amount'))
+                    tags__name__in=['transfer', 'interest', "mums's loan"]
+                ).aggregate(sum=Sum('amount'))
                 )
             )
         date += relativedelta(months=1)
+    months.reverse()
     return months
 
 

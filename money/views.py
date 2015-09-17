@@ -86,7 +86,7 @@ class SincePayDayArchiveView(ArchiveIndexView):
         try:
             self.next_pay_day = queryset.filter(
                 tags__name="salary",
-                date__gt=self.this_pay_day.date).order_by('-date')[0]
+                date__gt=self.this_pay_day.date).order_by('date')[0]
         except IndexError:
             self.next_pay_day = None
         queryset = queryset.filter(
@@ -201,3 +201,32 @@ def summary(request, year):
          'months': months
          },
         )
+
+
+def isas(request):
+    ISAS = [
+        'Aldermore ISA',
+        'Cheshire ISA',
+        'Santander ISA 2012-2013',
+        # 'Santander ISA 2013-2014', this transferred to the 2yr one below, Santander relabelled the account, so there's no history for this one
+        'Santander 2yr fixed ISA 2014',
+        'Santander easy access ISA 2014/2015',
+    ]
+    transactions = models.Transaction.objects.filter(
+        account__name__in=ISAS
+    ).order_by('date')
+    total = sum(v for k, v in settings.INITIAL_BALANCES.items() if k in ISAS)
+    summed = []
+    for t in transactions:
+        total += t.amount
+        summed.append((t, total))
+    balances = (
+        (i, models.Transaction.objects.filter(
+            account__name=i).aggregate(sum=Sum('amount'))['sum'] +
+         settings.INITIAL_BALANCES.get(i, 0))
+        for i in ISAS
+    )
+    return render(request, 'money/isas.html', {
+        'transactions': summed,
+        'balances': balances
+    })

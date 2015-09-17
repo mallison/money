@@ -24,7 +24,7 @@
 	  <label for="{{ tag }}">{{ tag }}</label>
 	</td>
 	<td class="amount">
-	  <label>{{ total|pretty_amount }}<input id="{{ tag }}" name="tags" type="radio" value="{{ tag }}" /></label>
+	  <label>{{ total|pretty_amount }}<input id="{{ tag }}" name="tags" type="radio" value="{{ tag|slugify }}" /></label>
 	</td>
       </tr>
       {% endif %}
@@ -39,16 +39,18 @@
       <th>Memo</th>
       <th class="amount">Amount</th>
       <th class="amount">Balance</th>
+      <th class="amount">Spent</th>
       <th>Note</th>
       <th>Tags</th>
     </tr>
     {% for transaction in transactions %}
-    <tr class="{% spaceless %}{% for tag in transaction.tags.all %}{{ tag.name }} {% empty %}misc{% endfor %}{% endspaceless %} {{ transaction.account.name|slugify }} {% if transaction.tags.all.0.name != "transfer" %}{% if transaction.amount < 0 %}out{% else %}in{% endif %}{% endif %}">
+    <tr class="{% spaceless %}{% for tag in transaction.tags.all %}{{ tag.name|slugify }} {% empty %}misc{% endfor %}{% endspaceless %} {{ transaction.account.name|slugify }} {% if transaction.tags.all.0.name != "transfer" %}{% if transaction.amount < 0 %}out{% else %}in{% endif %}{% endif %}">
       <td>{{ transaction.date|date:"d F Y" }}</td>
       <td>{{ transaction.account.name }}</td>
       <td>{{ transaction.memo|linebreaks }}</td>
       <td class="amount">{{ transaction.amount|pretty_amount }}</td>
       <td class="amount">{{ transaction.since_pay_day_balance|pretty_amount }}</td>
+      <td class="amount">{{ transaction.spent_since_pay_day|pretty_amount }}</td>
       <td class="note editable">
         {% include "money/note_snippet.html" %}
       </td>

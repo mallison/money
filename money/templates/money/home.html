@@ -1,34 +1,12 @@
-{% extends "money/base.html" %}
+*{% extends "money/base.html" %}
 {% load money %}
 
 {% block content %}
 <p style="font-size:8em;text-align:center;">&pound;{{ latest_transaction.total_balance|pretty_amount }}</p>
 <br>
-<table style="width:auto;margin:auto;margin-bottom:.5em;font-size:1.5em">
-  <tr>
-    {% for date, total in months %}
-    <th><a href="{% url money-month-archive date.year date|date:"b" %}">{{ date|date:"F" }}</a></th>
-    {% endfor %}
-    <th>Year to date</th>
-    <th>Estimate for year</th>
-  </tr>
-  <tr>
-    {% for date, total in months %}
-    <td class="amount" style="text-align:right">
-      {{ total.sum|pretty_amount }}
-      {% if forloop.last %}
-      {{ total.sum|add:outstanding|pretty_amount }}
-      {% endif %}
-    </td>
-    {% if forloop.last %}<td class="amount" style="text-align:right">{{ overall_total.sum|pretty_amount }}</td>
-    <td class="amount">{{ before_this_month|add:after_this_month|pretty_amount }}</td>
-    {% endif %}
-    {% endfor %}
-  </tr>
-</table>
 
 <div style="margin:auto;width:50%">
-  <table style="width:auto;margin:auto;font-size:1.5em;float:left">
+  <table style="width:auto;margin:auto;font-size:1.5em">
     <tr>
       <td>Savings <small>(since paying into pension)</small></td>
       <td class="amount">{{ living_balance|pretty_amount }}</td>
@@ -45,6 +23,16 @@
     {% endif %}
     {% endfor %}
   </table>
-
 </div>
+
+<table style="width:auto;margin:auto;margin-bottom:.5em;font-size:1.5em">
+  {% for date, total in months %}
+  <tr>
+    <td><a href="{% url money-month-archive date.year date|date:"b" %}">{{ date|date:"Y F" }}</a></td>
+    {% with abs_sum=total.sum|stringformat:"+d"|slice:"1:" %}
+    <td class="amount"><div style="margin-left:200px;height:20px;background-color:{% if total.sum > 0 %}green{% else %}red{% endif %};inline:block;width:{% widthratio abs_sum 300000 200 %}px;{% if total.sum < 0 %}position:relative;left:{% widthratio total.sum|default:0 300000 200 %}px{% endif %}">{{ total.sum|pretty_amount }}</div></td>      {% endwith %}
+  </tr>
+  {% endfor %}
+</table>
+
 {% endblock %}

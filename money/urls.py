@@ -13,6 +13,8 @@ urlpatterns = patterns(
 
     (r'^untagged/$', views.untagged),
 
+    (r'^isas/$', views.isas),
+
     url(r'^load/$', views.load,
         name="money-load",
         ),

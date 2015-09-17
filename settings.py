@@ -99,6 +99,7 @@ INITIAL_BALANCES = {  # as of 1 March 2013
     'Santander ISA 2012-2013': 564000,
     'Virgin savings': 1916024,
     'West Brom savings': 1020843,
+    'Tax': -834934,
 }
 
 REGULAR_TRANSACTIONS = {
